@@ -1,4 +1,4 @@
-package com.rewe.digita.calendar;
+package com.rewe.digital.calendar;
 
 import java.util.*;
 

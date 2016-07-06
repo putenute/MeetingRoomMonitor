@@ -27,7 +27,7 @@
                 </descriptorRefs>
                 <archive>
                     <manifest>
-                        <mainClass>com.rewe.digita.calendar.CalendarReader</mainClass>
+                        <mainClass>com.rewe.digital.calendar.CalendarReader</mainClass>
                     </manifest>
                 </archive>
 
