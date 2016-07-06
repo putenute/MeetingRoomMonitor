@@ -12,6 +12,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
+import com.rewe.digital.calendar.api.DataTransferObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,11 +35,17 @@ public class CalendarReader {
     private static final String actualCalendar = "";
     private static final String nextFreeRoom = "";
 
+    private static String roomName;
 
     @Inject
-    public CalendarReader(@Value("${cal.p12file}") final String p12file, @Value("${cal.serviceAccountEmail}")
-    final String serviceAccountEmail) {
+    public CalendarReader(@Value("${cal.p12file}") final String p12file,
+                          @Value("${cal.serviceAccountEmail}")  final String serviceAccountEmail,
+                          @Value("${cal.roomName}") final String roomName
+    ) {
         try {
+
+            this.roomName = roomName;
+
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             final Credential credential =
                     authorize(serviceAccountEmail, p12file);
@@ -47,12 +54,13 @@ public class CalendarReader {
 
             RoomCalendar cal =
                         new RoomCalendar("rewe-digital.com_2d34333934343339393831@resource.calendar.google.com",
-                                "Room - RED");
-            calendarList.put("Room - RED", cal);
-            calendarStatus.put("Room - RED", true);
+                                roomName);
+            calendarList.put(roomName, cal);
+            calendarStatus.put(roomName, true);
 
             pullMeetings(cal);
 
+            //TODO Für andere calendar machen!             updateStatus(cal);
 
             /* TODO: Service Account hat keinen Zugriff auf Räume !
             {
@@ -102,6 +110,15 @@ public class CalendarReader {
                 .setServiceAccountPrivateKeyFromP12File(new File(p12File))
                 .build();
         return credential;
+    }
+
+    public static void updateStatus(final RoomCalendar calendar) {
+        if (calendar.getStatus()) {
+            calendarStatus.put(calendar.getRoomName(), true);
+        }
+        else {
+            calendarStatus.put(calendar.getRoomName(), false);
+        }
     }
 
     public static void pullMeetings(final RoomCalendar calendar) {
@@ -163,5 +180,58 @@ public class CalendarReader {
         } catch (final IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public DataTransferObject getMeetingRoomMonitorData() {
+        final DataTransferObject dataTransferObject = new DataTransferObject();
+
+
+        // Get all meetings for this room
+        RoomCalendar calendar = calendarList.get(roomName);
+        dataTransferObject.setRoomName(roomName);
+
+
+
+        // Current Meeting
+        Date now = new Date();
+        Meeting actualMeeting = calendar.getMeetingAt(now);
+        if (actualMeeting != null) {
+            dataTransferObject.setCurrentEventEndTime(actualMeeting.getEndTimePretty());
+            dataTransferObject.setCurrentEventName( actualMeeting.getTitle());
+            dataTransferObject.setCurrentEventOrganizer(actualMeeting.getOrganizer());
+            dataTransferObject.setCurrentEventStartTime(actualMeeting.getStartTimePretty());
+        } else {
+            dataTransferObject.setCurrentEventName( "JETZT KEIN TERMIN");
+        }
+
+
+
+
+        // Next meeting(s)
+        if (calendar.getMeetingsAfter(now).size() > 0) {
+            Meeting nextMeeting = calendar.getMeetingsAfter(now).get(0);
+            if (nextMeeting != null) {
+                dataTransferObject.setNextEventEndTime(nextMeeting.getEndTimePretty());
+                dataTransferObject.setNextEventName(nextMeeting.getTitle());
+                dataTransferObject.setNextEventOrganizer(nextMeeting.getOrganizer());
+                dataTransferObject.setNextEventStartTime(nextMeeting.getStartTimePretty());
+            }else {
+                dataTransferObject.setCurrentEventName( "KEIN WEITERER TERMIN");
+            }
+
+        }
+
+
+
+        // Next free meetings
+        // next free meetings
+        //if (nextFreeRoomCalendar != null) {
+            //html = html.replace(NEXT_FREE_ROOM_NAME, nextFreeRoomCalendar.getRoomName());
+           // html = html.replace(NEXT_FREE_ROOM_TIME, nextFreeRoomCalendar.getNextMeetingStartTime());
+        //}
+        dataTransferObject.setNextFreeRoomFreeUntil("23:11");
+        dataTransferObject.setNextFreeRoomName("Room DeineMudda");
+
+        return dataTransferObject;
     }
 }
