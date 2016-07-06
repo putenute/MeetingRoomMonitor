@@ -1,13 +1,13 @@
 package com.rewe.digital.calendar;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 
 /**
  * Created by sebastianglahn on 22.12.15.
  */
+
 public class Meeting {
 
     private String organizer;
@@ -16,7 +16,7 @@ public class Meeting {
     private String title;
     private Date startTime;
     private Date endTime;
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 
     public Meeting(final String organizer, final String title, final Date startTime, final Date endTime) {
         this.organizer = Objects.requireNonNull(organizer);
@@ -31,7 +31,7 @@ public class Meeting {
         return endTimePretty;
     }
 
-    public void setEndTimePretty(String endTimePretty) {
+    public void setEndTimePretty(final String endTimePretty) {
         this.endTimePretty = endTimePretty;
     }
 
@@ -39,7 +39,7 @@ public class Meeting {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -47,7 +47,7 @@ public class Meeting {
         return startTimePretty;
     }
 
-    public void setStartTimePretty(String startTimePretty) {
+    public void setStartTimePretty(final String startTimePretty) {
         this.startTimePretty = startTimePretty;
     }
 
@@ -55,7 +55,7 @@ public class Meeting {
         return organizer;
     }
 
-    public void setOrganizer(String organizer) {
+    public void setOrganizer(final String organizer) {
         this.organizer = organizer;
     }
 
@@ -63,7 +63,7 @@ public class Meeting {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(final Date startTime) {
         this.startTime = startTime;
     }
 
@@ -71,7 +71,7 @@ public class Meeting {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(final Date endTime) {
         this.endTime = endTime;
     }
 }
