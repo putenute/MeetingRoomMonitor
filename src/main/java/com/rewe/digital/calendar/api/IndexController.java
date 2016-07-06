@@ -2,7 +2,6 @@ package com.rewe.digital.calendar.api;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,9 +20,7 @@ public class IndexController {
     }
 
     @RequestMapping("/events/sample")
-    public
-    @ResponseBody
-    DataTransferObject getSample() {
+    public DataTransferObject getSample() {
         final DataTransferObject dataTransferObject = new DataTransferObject();
 
         dataTransferObject.setCurrentEventEndTime("12:30");
