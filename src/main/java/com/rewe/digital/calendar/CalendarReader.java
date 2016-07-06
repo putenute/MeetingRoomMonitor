@@ -216,7 +216,7 @@ public class CalendarReader {
                 dataTransferObject.setNextEventOrganizer(nextMeeting.getOrganizer());
                 dataTransferObject.setNextEventStartTime(nextMeeting.getStartTimePretty());
             }else {
-                dataTransferObject.setCurrentEventName( "KEIN WEITERER TERMIN");
+                dataTransferObject.setNextEventName( "KEIN WEITERER TERMIN");
             }
 
         }
