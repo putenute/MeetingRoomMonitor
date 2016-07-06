@@ -51,6 +51,7 @@ function setRoomFree() {
         roomBox.addClass("alert-success");
     }
 
+    $('#nextFreeRoomBox').hide();
     btnTerminateCurrent.addClass("disabled");
 
     roomState.html("frei");
@@ -62,6 +63,7 @@ function setRoomOccupied() {
         roomBox.addClass("alert-danger");
     }
 
+    $('#nextFreeRoomBox').show();
     btnTerminateCurrent.removeClass("disabled");
 
     roomState.html("besetzt");
