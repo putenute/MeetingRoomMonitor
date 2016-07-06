@@ -11,7 +11,10 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,8 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Properties;
 
+@Component
 public class CalendarReader {
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "calendar-reader";
@@ -34,17 +37,14 @@ public class CalendarReader {
     private static String actualCalendar = "";
     private static final String nextFreeRoom = "";
 
-    public CalendarReader(final String propertiesFile) {
-        final Properties prop = new Properties();
-        try {
-            prop.load(CalendarReader.class.getClassLoader().getResourceAsStream(propertiesFile));
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
+
+    @Inject
+    public CalendarReader(@Value("${cal.p12file}") final String p12file, @Value("${cal.serviceAccountEmail}")
+    final String serviceAccountEmail) {
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             final Credential credential =
-                    authorize(prop.getProperty("serviceAccountEmail"), prop.getProperty("p12file"));
+                    authorize(serviceAccountEmail, p12file);
             client = new com.google.api.services.calendar.Calendar.Builder(
                     httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
             {

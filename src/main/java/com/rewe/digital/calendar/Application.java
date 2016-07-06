@@ -7,29 +7,16 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 @SpringBootApplication
 public class Application {
@@ -43,7 +30,7 @@ public class Application {
     private static final HashMap<String, RoomCalendar> calendarList = new HashMap<>();
     private static final HashMap<String, Boolean> calendarStatus = new HashMap<>();
     private static final String actualCalendar = "";
-    private static String nextFreeRoom = "";
+    private static final String nextFreeRoom = "";
 
     public static void main(final String[] args) {
         //This line starts the webserver
@@ -51,7 +38,7 @@ public class Application {
 
         //this.reader = new CalendarReader();
 
-        final Options options = new Options();
+        /*final Options options = new Options();
         options.addOption("d", true, "webserver directory");
         options.addOption("c", true, "calendar name");
         final CommandLineParser parser = new DefaultParser();
@@ -148,7 +135,7 @@ public class Application {
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public static void updateStatus(final RoomCalendar calendar) {
