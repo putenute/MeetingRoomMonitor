@@ -11,49 +11,61 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
-import org.apache.commons.cli.*;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Properties;
 
 public class CalendarReader {
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "calendar-reader";
     private static HttpTransport httpTransport;
     private static com.google.api.services.calendar.Calendar client;
-    private static HashMap<String, RoomCalendar> calendarList = new HashMap<>();
-    private static HashMap<String, Boolean> calendarStatus = new HashMap<>();
+    private static final HashMap<String, RoomCalendar> calendarList = new HashMap<>();
+    private static final HashMap<String, Boolean> calendarStatus = new HashMap<>();
     private static String actualCalendar = "";
-    private static String nextFreeRoom = "";
+    private static final String nextFreeRoom = "";
 
     public CalendarReader(final String propertiesFile) {
-        Properties prop = new Properties();
+        final Properties prop = new Properties();
         try {
             prop.load(CalendarReader.class.getClassLoader().getResourceAsStream(propertiesFile));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-            Credential credential = authorize(prop.getProperty("serviceAccountEmail"), prop.getProperty("p12file"));
+            final Credential credential =
+                    authorize(prop.getProperty("serviceAccountEmail"), prop.getProperty("p12file"));
             client = new com.google.api.services.calendar.Calendar.Builder(
                     httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
             {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_2d34333934343339393831@resource.calendar.google.com", "Room RED");
+                final RoomCalendar cal =
+                        new RoomCalendar("rewe-digital.com_2d34333934343339393831@resource.calendar.google.com",
+                                "Room RED");
                 calendarList.put("Room RED", cal);
                 calendarStatus.put("Room RED", true);
             }
             {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_2d353631343032313834@resource.calendar.google.com", "SKY RED");
+                final RoomCalendar cal =
+                        new RoomCalendar("rewe-digital.com_2d353631343032313834@resource.calendar.google.com",
+                                "SKY RED");
                 calendarList.put("SKY RED", cal);
                 calendarStatus.put("SKY RED", true);
             }
 
             {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_2d34343833323535383331@resource.calendar.google.com", "Room YELLOW");
+                final RoomCalendar cal =
+                        new RoomCalendar("rewe-digital.com_2d34343833323535383331@resource.calendar.google.com",
+                                "Room YELLOW");
                 calendarList.put("Room YELLOW", cal);
                 calendarStatus.put("Room YELLOW", true);
             }
@@ -81,18 +93,18 @@ public class CalendarReader {
                 calendarList.put("Room ORANGE", cal);
             }
             {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_3532363232323630313836@resource.calendar.google.com", "Room VIENNA");
+                RoomCalendar cal = new RoomCalendar("rewe-digital.com_3532363232323630313836@resource.calendar.google
+                .com", "Room VIENNA");
                 calendarList.put("Room VIENNA", cal);
             }
             */
 
 
-
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
-        } catch (GeneralSecurityException e) {
+        } catch (final GeneralSecurityException e) {
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -102,14 +114,14 @@ public class CalendarReader {
     }
 
     public RoomCalendar getNextFreeRoomCalendar() {
-        RoomCalendar cal = calendarList.get(nextFreeRoom);
+        final RoomCalendar cal = calendarList.get(nextFreeRoom);
 
         return calendarList.get(nextFreeRoom);
     }
 
     private static Credential authorize(final String serviceAccountEmail, final String p12File) throws Exception {
-        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-        GoogleCredential credential = new GoogleCredential.Builder().setTransport(httpTransport)
+        final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        final GoogleCredential credential = new GoogleCredential.Builder().setTransport(httpTransport)
                 .setJsonFactory(jsonFactory)
                 .setServiceAccountId(serviceAccountEmail)
                 .setServiceAccountScopes(Collections.singleton(CalendarScopes.CALENDAR))
@@ -128,19 +140,20 @@ public class CalendarReader {
     }
 
     public static void pullMeetings(final RoomCalendar calendar) {
-        java.util.Calendar now = java.util.Calendar.getInstance();
-        Date today = new Date();
+        final java.util.Calendar now = java.util.Calendar.getInstance();
+        final Date today = new Date();
         today.setHours(0);
-        DateTime minTime = new DateTime(today);
+        final DateTime minTime = new DateTime(today);
         today.setHours(23);
         today.setMinutes(59);
-        DateTime maxTime = new DateTime(today);
+        final DateTime maxTime = new DateTime(today);
         calendar.clearMeetings();
         try {
-            Events eventFeed = client.events().list(calendar.getRoomId()).setTimeMin(minTime).setTimeMax(maxTime).execute();
-            for (Event event : eventFeed.getItems()) {
+            final Events eventFeed =
+                    client.events().list(calendar.getRoomId()).setTimeMin(minTime).setTimeMax(maxTime).execute();
+            for (final Event event : eventFeed.getItems()) {
                 if (event.getStart() != null && event.getEnd() != null) {
-                    java.util.Calendar timeToCheck = java.util.Calendar.getInstance();
+                    final java.util.Calendar timeToCheck = java.util.Calendar.getInstance();
                     timeToCheck.setTimeInMillis(event.getStart().getDateTime().getValue());
                     if (now.get(java.util.Calendar.YEAR) == timeToCheck.get(java.util.Calendar.YEAR)) {
                         if (now.get(java.util.Calendar.DAY_OF_YEAR) == timeToCheck.get(java.util.Calendar.DAY_OF_YEAR))
@@ -156,13 +169,17 @@ public class CalendarReader {
                                 }
                                 //CHECK: If visibility = private, then there will be no attendees!
                                 if (event.getVisibility() != null && event.getVisibility().equals("private")) {
-                                    Meeting meeting = new Meeting("Privat", "Privater Termin", new Date(event.getStart().getDateTime().getValue()), new Date(event.getEnd().getDateTime().getValue()));
+                                    final Meeting meeting = new Meeting("Privat", "Privater Termin",
+                                            new Date(event.getStart().getDateTime().getValue()),
+                                            new Date(event.getEnd().getDateTime().getValue()));
                                     calendar.addMeeting(meeting);
                                 } else {
-                                    for (EventAttendee attendee : event.getAttendees()) {
+                                    for (final EventAttendee attendee : event.getAttendees()) {
                                         if (attendee.getResource() != null) {
                                             if (attendee.getResource() == true && attendee.getDisplayName().equals(calendar.getRoomName()) && !attendee.getResponseStatus().equals("declined")) {
-                                                Meeting meeting = new Meeting(organizer, event.getSummary(), new Date(event.getStart().getDateTime().getValue()), new Date(event.getEnd().getDateTime().getValue()));
+                                                final Meeting meeting = new Meeting(organizer, event.getSummary(),
+                                                        new Date(event.getStart().getDateTime().getValue()),
+                                                        new Date(event.getEnd().getDateTime().getValue()));
                                                 calendar.addMeeting(meeting);
                                             }
                                         }
@@ -172,7 +189,7 @@ public class CalendarReader {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -181,28 +198,28 @@ public class CalendarReader {
         return actualCalendar;
     }
 
-    public static void setActualCalendar(String actualCalendar) {
+    public static void setActualCalendar(final String actualCalendar) {
         CalendarReader.actualCalendar = actualCalendar;
     }
 
 
     public String transformHTML(String html, final RoomCalendar calendar, final RoomCalendar nextFreeRoomCalendar) {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.YYYY HH:mm");
-        Date now = new Date();
-        String ROOM_STATE = "{room_state}";
-        String ROOM_STATE_COLOR = "{room_state_color}";
-        String ROOM_NAME = "{this_room_name}";
-        String TIME_AND_DATE = "{time_and_date}";
-        String NOW_START_TIME = "{now_start_time}";
-        String NOW_END_TIME = "{now_end_time}";
-        String NOW_SUMMARY = "{now_summary}";
-        String NOW_ORGANISATOR = "{now_organisator}";
-        String LATER_START_TIME = "{later_start_time}";
-        String LATER_END_TIME = "{later_end_time}";
-        String LATER_SUMMERY = "{later_summary}";
-        String LATER_ORGANIZER = "{later_organisator}";
-        String NEXT_FREE_ROOM_NAME = "{next_free_room_name}";
-        String NEXT_FREE_ROOM_TIME = "{next_free_room_time}";
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.YYYY HH:mm");
+        final Date now = new Date();
+        final String ROOM_STATE = "{room_state}";
+        final String ROOM_STATE_COLOR = "{room_state_color}";
+        final String ROOM_NAME = "{this_room_name}";
+        final String TIME_AND_DATE = "{time_and_date}";
+        final String NOW_START_TIME = "{now_start_time}";
+        final String NOW_END_TIME = "{now_end_time}";
+        final String NOW_SUMMARY = "{now_summary}";
+        final String NOW_ORGANISATOR = "{now_organisator}";
+        final String LATER_START_TIME = "{later_start_time}";
+        final String LATER_END_TIME = "{later_end_time}";
+        final String LATER_SUMMERY = "{later_summary}";
+        final String LATER_ORGANIZER = "{later_organisator}";
+        final String NEXT_FREE_ROOM_NAME = "{next_free_room_name}";
+        final String NEXT_FREE_ROOM_TIME = "{next_free_room_time}";
 
         // Header
         if (calendar.getStatus()) {
@@ -216,7 +233,7 @@ public class CalendarReader {
         html = html.replace(TIME_AND_DATE, dateFormatter.format(now));
 
         // Now
-        Meeting actualMeeting = calendar.getMeetingAt(now);
+        final Meeting actualMeeting = calendar.getMeetingAt(now);
         if (actualMeeting != null) {
             html = html.replace(NOW_START_TIME, actualMeeting.getStartTimePretty());
             html = html.replace(NOW_END_TIME, actualMeeting.getEndTimePretty());
@@ -231,7 +248,7 @@ public class CalendarReader {
 
         // Later
         if (calendar.getMeetingsAfter(now).size() > 0) {
-            Meeting nextMeeting = calendar.getMeetingsAfter(now).get(0);
+            final Meeting nextMeeting = calendar.getMeetingsAfter(now).get(0);
             if (nextMeeting != null) {
                 html = html.replace(LATER_START_TIME, nextMeeting.getStartTimePretty());
                 html = html.replace(LATER_END_TIME, nextMeeting.getEndTimePretty());
@@ -263,19 +280,19 @@ public class CalendarReader {
                 throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
             }
             int readBytes;
-            byte[] buffer = new byte[4096];
+            final byte[] buffer = new byte[4096];
             resStreamOut = new FileOutputStream(new File(targetDirectory, new File(resourceName).getName()));
             while ((readBytes = stream.read(buffer)) > 0) {
                 resStreamOut.write(buffer, 0, readBytes);
             }
             resStreamOut.close();
             stream.close();
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Options options = new Options();
         options.addOption("d", true, "webserver directory");
         options.addOption("c", true, "calendar name");
@@ -371,6 +388,6 @@ public class CalendarReader {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
 }
