@@ -50,6 +50,9 @@ function setRoomFree() {
         roomBox.removeClass("alert-danger");
         roomBox.addClass("alert-success");
     }
+
+    btnTerminateCurrent.addClass("disabled");
+
     roomState.html("frei");
 }
 
