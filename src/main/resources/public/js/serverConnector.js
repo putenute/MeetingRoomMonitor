@@ -10,7 +10,7 @@ $('document').ready(function() {
 });
 
 function fetchDataFromServer() {
-    $.get("/events/sample", null, function(data, textStatus, jqXHR) {
+    $.get("/events", null, function(data, textStatus, jqXHR) {
         setRoomName(data.roomName);
         if (data.currentEventName == "JETZT KEIN TERMIN") {
             setRoomFree();
