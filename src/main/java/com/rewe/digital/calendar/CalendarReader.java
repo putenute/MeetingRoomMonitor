@@ -6,27 +6,17 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventAttendee;
-import com.google.api.services.calendar.model.Events;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.GeneralSecurityException;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 
-@Component
+
 public class CalendarReader {
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "calendar-reader";
@@ -34,7 +24,7 @@ public class CalendarReader {
     private static com.google.api.services.calendar.Calendar client;
     private static final HashMap<String, RoomCalendar> calendarList = new HashMap<>();
     private static final HashMap<String, Boolean> calendarStatus = new HashMap<>();
-    private static String actualCalendar = "";
+    private static final String actualCalendar = "";
     private static final String nextFreeRoom = "";
 
 
@@ -109,7 +99,7 @@ public class CalendarReader {
         }
     }
 
-    public RoomCalendar getCurrentCalendar() {
+    /*public RoomCalendar getCurrentCalendar() {
         return calendarList.get(actualCalendar);
     }
 
@@ -117,7 +107,7 @@ public class CalendarReader {
         final RoomCalendar cal = calendarList.get(nextFreeRoom);
 
         return calendarList.get(nextFreeRoom);
-    }
+    }*/
 
     private static Credential authorize(final String serviceAccountEmail, final String p12File) throws Exception {
         final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -130,6 +120,7 @@ public class CalendarReader {
         return credential;
     }
 
+    /*
     public static void updateStatus(final RoomCalendar calendar) {
         if (calendar.getStatus()) {
             calendarStatus.put(calendar.getRoomName(), true);
@@ -138,8 +129,8 @@ public class CalendarReader {
             calendarStatus.put(calendar.getRoomName(), false);
         }
     }
-
-    public static void pullMeetings(final RoomCalendar calendar) {
+    */
+    /*public static void pullMeetings(final RoomCalendar calendar) {
         final java.util.Calendar now = java.util.Calendar.getInstance();
         final Date today = new Date();
         today.setHours(0);
@@ -200,10 +191,10 @@ public class CalendarReader {
 
     public static void setActualCalendar(final String actualCalendar) {
         CalendarReader.actualCalendar = actualCalendar;
-    }
+    } */
 
 
-    public String transformHTML(String html, final RoomCalendar calendar, final RoomCalendar nextFreeRoomCalendar) {
+    /*public String transformHTML(String html, final RoomCalendar calendar, final RoomCalendar nextFreeRoomCalendar) {
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.YYYY HH:mm");
         final Date now = new Date();
         final String ROOM_STATE = "{room_state}";
@@ -268,10 +259,10 @@ public class CalendarReader {
             html = html.replace(NEXT_FREE_ROOM_TIME, nextFreeRoomCalendar.getNextMeetingStartTime());
         }
         return html;
-    }
+    }*/
 
 
-    public static void extractFromJar(final String resourceName, final String targetDirectory) {
+    /*public static void extractFromJar(final String resourceName, final String targetDirectory) {
         InputStream stream = null;
         OutputStream resStreamOut = null;
         try {
@@ -290,7 +281,7 @@ public class CalendarReader {
         } catch (final Exception ex) {
             ex.printStackTrace();
         }
-    }
+    }*/
 
     /*public static void main(String[] args) {
         Options options = new Options();
