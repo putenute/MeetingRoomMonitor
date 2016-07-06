@@ -1,6 +1,8 @@
 package com.rewe.digital.calendar.api;
 
+import com.rewe.digital.calendar.CalendarReader;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +12,11 @@ import java.io.IOException;
 
 @RestController
 public class IndexController {
+
+    @Autowired
+    CalendarReader calReader;
+
+
 
     @RequestMapping("/")
     public String index(final HttpServletResponse response) throws IOException {
@@ -36,6 +43,15 @@ public class IndexController {
         dataTransferObject.setRoomName("Room -  RED");
 
         return dataTransferObject;
+
+
+    }
+
+
+    @RequestMapping("/events")
+    public DataTransferObject getEvents() {
+
+        return calReader.getMeetingRoomMonitorData();
 
 
     }
