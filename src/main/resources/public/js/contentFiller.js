@@ -14,6 +14,7 @@ var roomBox,            // container for room details
     nextStart,
     nextEnd,
     nextFreeRoom,
+    freeUntil,
     btnCleanTrue,
     btnCleanFalse,
     btnFeedbackPos,
@@ -34,7 +35,8 @@ $('document').ready(function () {
     nextOwner = $('#nextOwner');
     nextStart = $('#nextstart');
     nextEnd = $('#nextEnd');
-    nextFreeRoom = $('#nextfreeroom');
+    nextFreeRoom = $('#nextFreeRoom');
+    freeUntil = $('#freeUntil');
     btnCleanTrue = $('#btnCleanTrue');
     btnCleanFalse = $('#btnCleanFalse');
     btnFeedbackPos = $('#btnFeedbackPos');
@@ -96,4 +98,12 @@ function setNextStart(start) {
 
 function setNextEnd(end) {
     nextEnd.html(end);
+}
+
+function setNextFreeRoom(room) {
+    nextFreeRoom.html(room);
+}
+
+function setFreeUntil(time) {
+    freeUntil.html('frei bis: ' + time);
 }
