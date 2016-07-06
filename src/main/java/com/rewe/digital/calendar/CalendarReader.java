@@ -7,6 +7,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
@@ -46,24 +47,11 @@ public class CalendarReader {
 
             RoomCalendar cal =
                         new RoomCalendar("rewe-digital.com_2d34333934343339393831@resource.calendar.google.com",
-                                "Room RED");
-                calendarList.put("Room RED", cal);
-                calendarStatus.put("Room RED", true);
+                                "Room - RED");
+            calendarList.put("Room - RED", cal);
+            calendarStatus.put("Room - RED", true);
 
             pullMeetings(cal);
-
-            cal = new RoomCalendar("rewe-digital.com_2d353631343032313834@resource.calendar.google.com",
-                                "SKY RED");
-                calendarList.put("SKY RED", cal);
-                calendarStatus.put("SKY RED", true);
-
-
-
-            cal =                    new RoomCalendar("rewe-digital.com_2d34343833323535383331@resource.calendar.google.com",
-                                "Room YELLOW");
-                calendarList.put("Room YELLOW", cal);
-                calendarStatus.put("Room YELLOW", true);
-
 
 
             /* TODO: Service Account hat keinen Zugriff auf Räume !
@@ -117,17 +105,23 @@ public class CalendarReader {
     }
 
     public static void pullMeetings(final RoomCalendar calendar) {
+
         final java.util.Calendar now = java.util.Calendar.getInstance();
         final Date today = new Date();
         today.setHours(0);
-        final DateTime minTime = new DateTime(today);
+        final DateTime minTime = new DateTime(System.currentTimeMillis() - (120 * 60 * 1000));
         today.setHours(23);
         today.setMinutes(59);
-        final DateTime maxTime = new DateTime(today);
+        final DateTime maxTime = new DateTime(System.currentTimeMillis() + (12 * 60 * 60 * 1000));
         calendar.clearMeetings();
         try {
-            final Events eventFeed =
-                    client.events().list(calendar.getRoomId()).setTimeMin(minTime).setTimeMax(maxTime).execute();
+
+            final Calendar.Events.List list = client.events().list(calendar.getRoomId());
+            list.setTimeMin(minTime);
+            list.setTimeMax(maxTime);
+            list.setMaxResults(10);
+            list.setSingleEvents(true);
+            final Events eventFeed = list.execute();
             for (final Event event : eventFeed.getItems()) {
                 if (event.getStart() != null && event.getEnd() != null) {
                     final java.util.Calendar timeToCheck = java.util.Calendar.getInstance();
