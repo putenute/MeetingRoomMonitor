@@ -1,1 +1,110 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">	<head>    <meta charset="utf-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta name="viewport" content="width=device-width, initial-scale=1">    <meta name="description" content="">    <meta name="author" content="">    <title>REWE digital Meetinghelper</title>		<!-- Auto refresh page-->	<meta http-equiv="refresh" content="30" />    	    <!-- Bootstrap Core CSS -->	<link href="css/bootstrap.min.css" rel="stylesheet">    <!-- Custom CSS -->    <link href="css/modern-business.css" rel="stylesheet">    <!-- Custom Fonts -->    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"></head><body>	<table class="table" style="margin:0">		<tr >			<table class="table table-bordered" border="1" >				<thead>					<tr bgcolor="#44FF00" >						<th style="text-align:center;vertical-align:middle;min-width:15%"><b>FREI</b></th>						<th style="min-width:60%;text-align:center;vertical-align:middle;" ><font size="16">Room RED</font></th>						<th style="min-width:25%;text-align:center;vertical-align:middle;" >06.07.2016 11:12</th>					</tr>				</thead>				<tbody/>				 			</table>		</tr>		<tr>			<table class="table table-bordered" >				<thead>					<tr bgcolor="e6e6e6"  >						<th style="width:10%;text-align:center;vertical-align:middle;" ><b>Jetzt</b></th>						<th style="width:5%;text-align:center;vertical-align:middle;" >Von:</th>						<th style="width:5%;text-align:center;vertical-align:middle;" >Bis:</th>						<th style="width:50%;text-align:center;vertical-align:middle;" >Titel:</th>						<th style="width:30%;text-align:center;vertical-align:middle;" >Organisator:</th>											</tr>				</thead>				<tbody>						<tr bgcolor="e6e6e6" >						<td style="width:10%;text-align:center;vertical-align:middle;" ></td>						<td style="width:5%;text-align:center;vertical-align:middle;" >-</td>						<td style="width:5%;text-align:center;vertical-align:middle;" >-</td>						<td style="width:50%;text-align:center;vertical-align:middle;" >-</td>						<td style="width:30%;text-align:center;vertical-align:middle;" >-</td>					</tr>				</tbody>			</table>		</tr>					<tr>			<table class="table table-bordered"  >				<thead>					<tr bgcolor="e6e6e6" >						<th style="width:10%;text-align:center;vertical-align:middle;" ><b>Danach</b></th></th>						<th style="width:5%;text-align:center;vertical-align:middle;" >Von:</th>						<th style="width:5%;text-align:center;vertical-align:middle;" >Bis:</th>						<th style="width:50%;text-align:center;vertical-align:middle;" >Titel:</th>						<th style="width:30%;text-align:center;vertical-align:middle;" >Organisator:</th>						</tr>				</thead>				<tbody>						<tr bgcolor="e6e6e6" >						<td style="width:10%;text-align:center;vertical-align:middle;" ></td>						<td style="width:5%;text-align:center;vertical-align:middle;" >-</td>						<td style="width:5%;text-align:center;vertical-align:middle;" >-</td>						<td style="width:50%;text-align:center;vertical-align:middle;" >-</td>						<td style="width:30%;text-align:center;vertical-align:middle;" >-</td>					</tr>				</tbody>			</table>		</tr>		<tr>			<table class="table table-bordered" >				<thead>					<tr bgcolor="e6e6e6" >						<th style="width:20%;text-align:right;vertical-align:middle;" >N&auml;chster freier Konfi: </th>						<th style="width:50%;text-align:left;vertical-align:middle;" >SKY RED</th>						<th style="width:10%;text-align:center;vertical-align:middle;" >Frei bis:</th>						<th style="width:20%;text-align:left;vertical-align:middle;" >Ganzer Tag</th>					</tr>				</thead>				<tbody/>				</table>		</tr>		<tr>			<table class="table table-bordered" >				<thead>					<tr bgcolor="fafafa" >						<th><i>Made by Sebastian Glahn + Oliver Zilken</i></th>					</tr>				</thead>				<tbody/>			</table>		</tr>	</table></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- left colum -->
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">War der Raum beim Betreten sauber?</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- mid colum -->
+        <div class="col-md-6">
+            <div class="row">
+                <div class="alert alert-success col-md-12">
+                    <h1 class="text-center">Room RED</h1>
+                    <h3 class="text-center">frei</h3>
+                </div>
+            </div>
+
+            <!-- current meeting box -->
+            <div class="row" id="currentMeeting">
+                <div class="panel panel-default col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="text-center">jetzt</h4>
+                            <h1 class="text-center text-capitalize" id="currentTitle">Termin Titel</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>Organisator:</h3>
+                            <p id="currentOwner">toller name</p>
+                        </div>
+                        <div class="col-md-2">
+                            <h3 class="text-center">von:</h3>
+                            <p class="text-center" id="currentStart">startzeit</p>
+                        </div>
+                        <div class="col-md-2">
+                            <h3 class="text-center">bis:</h3>
+                            <p class="text-center" id="currentEnd">endzeit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- next meeting box -->
+            <div class="row" id="nextMeeting">
+                <div class="panel panel-default col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="text-center">danach</h4>
+                            <h1 class="text-center text-capitalize" id="nextTitle">Termin Titel</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>Organisator:</h3>
+                            <p id="nextOwner">toller name</p>
+                        </div>
+                        <div class="col-md-2">
+                            <h3 class="text-center">von:</h3>
+                            <p class="text-center" id="nextStart">startzeit</p>
+                        </div>
+                        <div class="col-md-2">
+                            <h3 class="text-center">bis:</h3>
+                            <p class="text-center" id="nextEnd">endzeit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-default col-md-12">
+                    <h4 class="text-center">nächster freier Raum</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- right colum -->
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <h1 class="text-center">termin beendet?</h1>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
