@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>REWE digital Meetinghelper</title>
+	
+	<!-- Auto refresh page-->
+	<meta http-equiv="refresh" content="30" />
+
+    
+	
+    <!-- Bootstrap Core CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<table class="table" style="margin:0">
+		<tr >
+			<table class="table table-bordered" border="1" >
+				<thead>
+					<tr bgcolor="{room_state_color}" >
+						<th style="text-align:center;vertical-align:middle;min-width:15%"><b>{room_state}</b></th>
+						<th style="min-width:60%;text-align:center;vertical-align:middle;" ><font size="16">{this_room_name}</font></th>
+						<th style="min-width:25%;text-align:center;vertical-align:middle;" >{time_and_date}</th>
+					</tr>
+				</thead>
+				<tbody/>				 
+			</table>
+		</tr>
+		<tr>
+			<table class="table table-bordered" >
+				<thead>
+					<tr bgcolor="e6e6e6"  >
+						<th style="width:10%;text-align:center;vertical-align:middle;" ><b>Jetzt</b></th>
+						<th style="width:5%;text-align:center;vertical-align:middle;" >Von:</th>
+						<th style="width:5%;text-align:center;vertical-align:middle;" >Bis:</th>
+						<th style="width:50%;text-align:center;vertical-align:middle;" >Titel:</th>
+						<th style="width:30%;text-align:center;vertical-align:middle;" >Organisator:</th>						
+					</tr>
+				</thead>
+				<tbody>	
+					<tr bgcolor="e6e6e6" >
+						<td style="width:10%;text-align:center;vertical-align:middle;" ></td>
+						<td style="width:5%;text-align:center;vertical-align:middle;" >{now_start_time}</td>
+						<td style="width:5%;text-align:center;vertical-align:middle;" >{now_end_time}</td>
+						<td style="width:50%;text-align:center;vertical-align:middle;" >{now_summary}</td>
+						<td style="width:30%;text-align:center;vertical-align:middle;" >{now_organisator}</td>
+					</tr>
+				</tbody>
+			</table>
+		</tr>			
+		<tr>
+			<table class="table table-bordered"  >
+				<thead>
+					<tr bgcolor="e6e6e6" >
+						<th style="width:10%;text-align:center;vertical-align:middle;" ><b>Danach</b></th></th>
+						<th style="width:5%;text-align:center;vertical-align:middle;" >Von:</th>
+						<th style="width:5%;text-align:center;vertical-align:middle;" >Bis:</th>
+						<th style="width:50%;text-align:center;vertical-align:middle;" >Titel:</th>
+						<th style="width:30%;text-align:center;vertical-align:middle;" >Organisator:</th>						</tr>
+				</thead>
+				<tbody>	
+					<tr bgcolor="e6e6e6" >
+						<td style="width:10%;text-align:center;vertical-align:middle;" ></td>
+						<td style="width:5%;text-align:center;vertical-align:middle;" >{later_start_time}</td>
+						<td style="width:5%;text-align:center;vertical-align:middle;" >{later_end_time}</td>
+						<td style="width:50%;text-align:center;vertical-align:middle;" >{later_summary}</td>
+						<td style="width:30%;text-align:center;vertical-align:middle;" >{later_organisator}</td>
+					</tr>
+				</tbody>
+			</table>
+		</tr>
+		<tr>
+			<table class="table table-bordered" >
+				<thead>
+					<tr bgcolor="e6e6e6" >
+						<th style="width:20%;text-align:right;vertical-align:middle;" >N&auml;chster freier Konfi: </th>
+						<th style="width:50%;text-align:left;vertical-align:middle;" >{next_free_room_name}</th>
+						<th style="width:10%;text-align:center;vertical-align:middle;" >Frei bis:</th>
+						<th style="width:20%;text-align:left;vertical-align:middle;" >{next_free_room_time}</th>
+					</tr>
+				</thead>
+				<tbody/>	
+			</table>
+		</tr>
+		<tr>
+			<table class="table table-bordered" >
+				<thead>
+					<tr bgcolor="fafafa" >
+						<th><i>Made by Sebastian Glahn + Oliver Zilken</i></th>
+					</tr>
+				</thead>
+				<tbody/>
+			</table>
+		</tr>
+	</table>
+</body>
+</html>
