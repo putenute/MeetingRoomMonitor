@@ -2,109 +2,159 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/customButtons.css">
 </head>
 
 
 <body>
+<br>
 <div class="container-fluid">
     <div class="row">
         <!-- left colum -->
-        <div class="col-md-3">
+        <div class="col-sm-3">
             <div class="panel panel-default">
                 <div class="row">
-                    <div class="col-md-12">
-                        <h1 class="text-center">War der Raum beim Betreten sauber?</h1>
+                    <div class="col-sm-12">
+                        <h4 class="text-center">War der Raum beim Betreten sauber?</h4>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-center">
-                        <button type="button" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                    <div class="col-sm-12 text-center"
+                         style="height:191px; display: table-cell; vertical-align: middle;">
+                        <button type="button" class="btn btn-primary btn-lg customButton" style="margin-top:57px">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-center">
-                        <button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span></button>
+                    <div class="col-sm-12 text-center"
+                         style="height:191px; display: table-cell; vertical-align: middle;">
+                        <button type="button" class="btn btn-danger btn-lg customButton" style="margin-top:50px">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- mid colum -->
-        <div class="col-md-6">
+        <div class="col-sm-6">
             <div class="row">
-                <div class="alert alert-success col-md-12">
+                <div class="alert alert-success col-sm-12">
                     <h1 class="text-center">Room RED</h1>
                     <h3 class="text-center">frei</h3>
                 </div>
             </div>
 
-            <!-- current meeting box -->
-            <div class="row" id="currentMeeting">
-                <div class="panel panel-default col-md-12">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h4 class="text-center">jetzt</h4>
-                            <h1 class="text-center text-capitalize" id="currentTitle">Termin Titel</h1>
+
+            <div id="" style="overflow-y: scroll; height:273px;">
+                <!-- current meeting box -->
+                <div class="row" id="currentMeeting">
+                    <div class="panel panel-default col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="text-center">jetzt</h4>
+                                <h1 class="text-center text-capitalize" id="currentTitle">Termin Titel</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h3>Organisator:</h3>
+                                <p id="currentOwner">toller name</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <h3 class="text-center">von:</h3>
+                                <p class="text-center" id="currentStart">startzeit</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <h3 class="text-center">bis:</h3>
+                                <p class="text-center" id="currentEnd">endzeit</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h3>Organisator:</h3>
-                            <p id="currentOwner">toller name</p>
+                </div>
+
+                <!-- next meeting box -->
+                <div class="row" id="nextMeeting">
+                    <div class="panel panel-default col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="text-center">danach</h4>
+                                <h1 class="text-center text-capitalize" id="nextTitle">Termin Titel</h1>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <h3 class="text-center">von:</h3>
-                            <p class="text-center" id="currentStart">startzeit</p>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h3>Organisator:</h3>
+                                <p id="nextOwner">toller name</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <h3 class="text-center">von:</h3>
+                                <p class="text-center" id="nextStart">startzeit</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <h3 class="text-center">bis:</h3>
+                                <p class="text-center" id="nextEnd">endzeit</p>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <h3 class="text-center">bis:</h3>
-                            <p class="text-center" id="currentEnd">endzeit</p>
-                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="panel panel-default col-sm-12">
+                        <h4 class="text-center">nächster freier Raum</h4>
                     </div>
                 </div>
             </div>
 
-            <!-- next meeting box -->
-            <div class="row" id="nextMeeting">
-                <div class="panel panel-default col-md-12">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h4 class="text-center">danach</h4>
-                            <h1 class="text-center text-capitalize" id="nextTitle">Termin Titel</h1>
+
+        </div>
+
+        <!-- right colum -->
+        <div class="col-sm-3">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default" style="height:376px;">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="text-center">Meeting Feedback</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h3>Organisator:</h3>
-                            <p id="nextOwner">toller name</p>
+                        <div class="row">
+                            <div class="col-sm-12 text-center" style="height:112px;">
+                                <button type="button" class="btn btn-success btn-lg customButton"><span
+                                        class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <h3 class="text-center">von:</h3>
-                            <p class="text-center" id="nextStart">startzeit</p>
+                        <div class="row">
+                            <div class="col-sm-12 text-center" style="height:112px;">
+                                <button type="button" class="btn btn-warning btn-lg customButton"><span
+                                        class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <h3 class="text-center">bis:</h3>
-                            <p class="text-center" id="nextEnd">endzeit</p>
+                        <div class="row">
+                            <div class="col-sm-12 text-center" style="height:112px;">
+                                <button type="button" class="btn btn-danger btn-lg customButton"><span
+                                        class="glyphicon glyphicon-minus" aria-hidden="true"></span></span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="panel panel-default col-md-12">
-                    <h4 class="text-center">nächster freier Raum</h4>
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-danger btn-lg btn-block">Termin beenden</button>
                 </div>
-            </div>
-        </div>
-
-        <!-- right colum -->
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <h1 class="text-center">termin beendet?</h1>
             </div>
         </div>
     </div>
 </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+
+
 </html>

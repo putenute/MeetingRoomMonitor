@@ -1,0 +1,6 @@
+.customButton {
+    width: 78px !important;
+    height: 78px !important;
+    display: table-cell;
+    vertical-align: middle;
+}
