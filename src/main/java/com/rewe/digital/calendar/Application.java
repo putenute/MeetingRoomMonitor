@@ -10,11 +10,7 @@ import com.google.api.services.calendar.model.Events;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -203,26 +199,4 @@ public class Application {
             e.printStackTrace();
         }
     }
-
-    public static void extractFromJar(final String resourceName, final String targetDirectory) {
-        InputStream stream = null;
-        OutputStream resStreamOut = null;
-        try {
-            stream = CalendarReader.class.getClassLoader().getResourceAsStream(resourceName);
-            if (stream == null) {
-                throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
-            }
-            int readBytes;
-            final byte[] buffer = new byte[4096];
-            resStreamOut = new FileOutputStream(new File(targetDirectory, new File(resourceName).getName()));
-            while ((readBytes = stream.read(buffer)) > 0) {
-                resStreamOut.write(buffer, 0, readBytes);
-            }
-            resStreamOut.close();
-            stream.close();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
 }
