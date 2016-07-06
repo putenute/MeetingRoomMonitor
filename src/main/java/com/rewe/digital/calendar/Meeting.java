@@ -1,4 +1,4 @@
-package com.rewe.digita.calendar;
+package com.rewe.digital.calendar;
 
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
