@@ -217,21 +217,21 @@ public class CalendarReader {
         final Meeting lastEventInRoom = roomCalendar.getLastFinishedMeetingBefore(new Date());
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
-            /*try {
-                notificationService
-                        .notifyOrganizerClean(lastEventInRoom, authorize(serviceAccountEmail, p12file),
-                                httpTransport);
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }*/
+            String tweet = ":) Der Raum deines Meetings '" + lastEventInRoom.getTitle() + "' wurde als sauber " +
+                    "bezeichnet!";
+            if (tweet.length() > 140) {
+                tweet = ":) Der Raum deines Meetings wurde als sauber bezeichnet!";
+            }
+            notificationService.postTweet(
+                    tweet);
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
-            /*try {
-                notificationService
-                        .notifyOrganizerDirty(lastEventInRoom, authorize(serviceAccountEmail, p12file), httpTransport);
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }*/
+            String tweet = ":/ Der Raum deines Meetings '" + lastEventInRoom.getTitle() +
+                    " wurde als schmutzig oder unaufgeräumt bewertet!";
+            if (tweet.length() > 140) {
+                tweet = ":) Der Raum deines Meetings wurde als schmutzig / unaufgeräumt bezeichnet!";
+            }
+            notificationService.postTweet(tweet);
         }
 
     }
