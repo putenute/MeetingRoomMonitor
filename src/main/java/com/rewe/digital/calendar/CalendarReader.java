@@ -93,9 +93,14 @@ public class CalendarReader {
 
     public void refreshMeetingsForAllCalendars(){
         for (final String room : knownRooms.keySet()) {
-            final RoomCalendar cal =
-                    new RoomCalendar(knownRooms.get(room),
-                            room);
+            RoomCalendar cal = null;
+            if (!calendarList.containsKey(room)) {
+                cal = new RoomCalendar(knownRooms.get(room),
+                        room);
+            } else {
+                cal = calendarList.get(room);
+            }
+
             try {
                 pullMeetings(cal);
                 calendarList.put(room, cal);
@@ -169,7 +174,7 @@ public class CalendarReader {
                             }
                             //CHECK: If visibility = private, then there will be no attendees!
                             if (event.getVisibility() != null && event.getVisibility().equals("private")) {
-                                final Meeting meeting = new Meeting("Privat", "Privater Termin",
+                                final Meeting meeting = new Meeting(event.getId(), "Privat", "Privater Termin",
                                         new Date(event.getStart().getDateTime().getValue()),
                                         new Date(event.getEnd().getDateTime().getValue()));
                                 calendar.addMeeting(meeting);
@@ -180,7 +185,8 @@ public class CalendarReader {
                                             if (attendee.getResource() == true &&
                                                     attendee.getDisplayName().equals(calendar.getRoomName()) &&
                                                     !attendee.getResponseStatus().equals("declined")) {
-                                                final Meeting meeting = new Meeting(organizer, event.getSummary(),
+                                                final Meeting meeting = new Meeting(event.getId(), organizer, event
+                                                        .getSummary(),
                                                         new Date(event.getStart().getDateTime().getValue()),
                                                         new Date(event.getEnd().getDateTime().getValue()));
                                                 calendar.addMeeting(meeting);
@@ -244,10 +250,22 @@ public class CalendarReader {
         final Date now = new Date();
         final Meeting actualMeeting = calendar.getMeetingAt(now);
         if (actualMeeting != null) {
-            dataTransferObject.setCurrentEventEndTime(actualMeeting.getEndTimePretty());
-            dataTransferObject.setCurrentEventName( actualMeeting.getTitle());
-            dataTransferObject.setCurrentEventOrganizer(actualMeeting.getOrganizer());
-            dataTransferObject.setCurrentEventStartTime(actualMeeting.getStartTimePretty());
+            //Maybe the meeting is finished already?
+            boolean meetingFinished = false;
+            for (final String meetingId : calendar.getManuallyFinishedMeetings()) {
+                if (meetingId.equals(actualMeeting.getId())) {
+                    meetingFinished = true;
+                    break;
+                }
+            }
+            if (!meetingFinished) {
+                dataTransferObject.setCurrentEventEndTime(actualMeeting.getEndTimePretty());
+                dataTransferObject.setCurrentEventName(actualMeeting.getTitle());
+                dataTransferObject.setCurrentEventOrganizer(actualMeeting.getOrganizer());
+                dataTransferObject.setCurrentEventStartTime(actualMeeting.getStartTimePretty());
+            } else {
+                dataTransferObject.setCurrentEventName("JETZT KEIN TERMIN");
+            }
         } else {
             dataTransferObject.setCurrentEventName( "JETZT KEIN TERMIN");
         }
@@ -311,5 +329,20 @@ public class CalendarReader {
         }
         roomCalendar.getRoomVotedClean().clear();
         roomCalendar.getRoomVotedDirty().clear();
+    }
+
+    public void endcurrrentEvent(final String roomId) {
+        final RoomCalendar roomCalendar = calendarList.get(roomId);
+        if (roomCalendar == null) {
+            return;
+        }
+        final Meeting currentMeeting = roomCalendar.getMeetingAt(new Date());
+        if (currentMeeting != null) {
+            currentMeeting.setEndTime(new Date());
+            if (roomCalendar.getManuallyFinishedMeetings().size() > 50) {
+                roomCalendar.getManuallyFinishedMeetings().clear();
+            }
+            roomCalendar.getManuallyFinishedMeetings().add(currentMeeting.getId());
+        }
     }
 }

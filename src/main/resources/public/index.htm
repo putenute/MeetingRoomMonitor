@@ -11,7 +11,7 @@
     <meta name="author" content="LayoutIt!">
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/stickyFooter.css" rel="stylesheet">
 
 </head>
 <body>
@@ -21,9 +21,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="alert alert-success" id="roomBox" style="margin-top:5px">
-                <div>
-                    <p class="text-center"><strong id="roomName">Room Name</strong></p>
-                </div>
+                <div class="text-center"><h1 id="roomName">Room Name</h1></div>
                 <table class="table table-condensed" style="margin-bottom:0px">
                     <tbody>
                     <tr>
@@ -47,16 +45,16 @@
                             <td class="text-left" colspan="3">jetzt:</td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="3"><p class="lead" id="currentTitle">currentTitle</p></td>
+                            <td class="text-left" colspan="3"><p class="lead" id="currentTitle" style="font-size:28px">currentTitle</p></td>
                         </tr>
                         <tr>
                             <td class="text-left" colspan="2">Organisator</td>
                             <td class="text-right">endet um:</td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="2"><strong
+                            <td class="text-left" colspan="2"><strong class="lead"
                                     id="currentOrganizator">currentOrganizator</strong></td>
-                            <td class="text-right"><strong id="currentEndTime">currentEndTime</strong></td>
+                            <td class="text-right"><strong class="lead" id="currentEndTime">currentEndTime</strong></td>
                         </tr>
                         </tbody>
                     </table>
@@ -87,15 +85,15 @@
                             <td class="text-left" colspan="3">danach:</td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="3"><p class="lead" id="nextTitle">nextTitle</p></td>
+                            <td class="text-left" colspan="3"><p class="lead" id="nextTitle" style="font-size:28px">nextTitle</p></td>
                         </tr>
                         <tr>
                             <td class="text-left" colspan="2">Organisator</td>
                             <td class="text-right">beginnt um:</td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="2"><strong id="nextOrganizator">nextOrganizator</strong></td>
-                            <td class="text-right"><strong id="nextStartTime">nextStartTime</strong></td>
+                            <td class="text-left" colspan="2"><strong class="lead" id="nextOrganizator">nextOrganizator</strong></td>
+                            <td class="text-right"><strong class="lead" id="nextStartTime">nextStartTime</strong></td>
                         </tr>
                         </tbody>
                     </table>
@@ -121,88 +119,105 @@
         </div>
     </div>
 
-    <div class="row">
+    <!-- no free rooms box -->
+    <div class="row" id="noFreeRoomsBox">
+        <div class="col-sm-12">
+            <div class="alert alert-danger">
+                <div class="text-center">
+                    <strong>Momentan sind alle Räume belegt!</strong>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-block" data-toggle="modal"
-                    data-target="#modal-container-448149">War der Raum beim Betreten sauber?
-            </button>
 
-            <div class="modal fade" id="modal-container-448149" role="dialog" aria-labelledby="myModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">War der Raum beim Betreten sauber?</h4>
-                        </div>
 
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-success btn-lg btn-block"
-                                                data-dismiss="modal" id="btnCleanTrue"
-                                                style="margin-top:50px; margin-bottom:50px;">ja
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-danger btn-lg btn-block"
-                                                data-dismiss="modal" id="btnCleanFalse"
-                                                style="margin-top:50px; margin-bottom:50px;">nein
-                                        </button>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
+                        data-target="#modal-container-448149">War der Raum beim Betreten sauber?
+                </button>
+
+                <div class="modal fade" id="modal-container-448149" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">War der Raum beim Betreten sauber?</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-success btn-lg btn-block"
+                                                    data-dismiss="modal" id="btnCleanTrue"
+                                                    style="margin-top:50px; margin-bottom:50px;">ja
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-danger btn-lg btn-block"
+                                                    data-dismiss="modal" id="btnCleanFalse"
+                                                    style="margin-top:50px; margin-bottom:50px;">nein
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">abbrechen</button>
+                            </div>
                         </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">abbrechen</button>
-                        </div>
                     </div>
 
                 </div>
 
             </div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
+                        data-target="#modal-container-750565">aktuellen Termin beenden
+                </button>
 
-        </div>
-        <div class="col-sm-6">
-            <button type="button" class="btn btn-default btn-block" data-toggle="modal"
-                    data-target="#modal-container-750565">aktuellen Termin beenden
-            </button>
+                <div class="modal fade" id="modal-container-750565" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Aktuellen Termin beenden?</h4>
+                            </div>
 
-            <div class="modal fade" id="modal-container-750565" role="dialog" aria-labelledby="myModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Aktuellen Termin beenden?</h4>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-danger btn-lg btn-block"
-                                                data-dismiss="modal" id="btnTerminateEvent"
-                                                style="margin-top:50px; margin-bottom:50px;">beenden
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-primary btn-lg btn-block"
-                                                data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nicht
-                                            beenden
-                                        </button>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-danger btn-lg btn-block"
+                                                    data-dismiss="modal" id="btnTerminateEvent"
+                                                    style="margin-top:50px; margin-bottom:50px;">beenden
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-primary btn-lg btn-block"
+                                                    data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nicht
+                                                beenden
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
+</footer>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

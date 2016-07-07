@@ -15,6 +15,7 @@ public class RoomCalendar {
     private String roomId;
     private final List<Date> roomVotedDirty = new ArrayList<>();
     private final List<Date> roomVotedClean = new ArrayList<>();
+    private final List<String> manuallyFinishedMeetings = new ArrayList<>();
 
     public RoomCalendar(final String id, final String name) {
         this.roomId = Objects.requireNonNull(id);
@@ -118,5 +119,9 @@ public class RoomCalendar {
                 nextMeetings.add(meeting);
         }
         return nextMeetings;
+    }
+
+    public List<String> getManuallyFinishedMeetings() {
+        return manuallyFinishedMeetings;
     }
 }
