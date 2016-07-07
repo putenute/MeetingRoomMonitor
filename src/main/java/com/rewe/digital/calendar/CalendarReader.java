@@ -36,8 +36,6 @@ public class CalendarReader {
     private static com.google.api.services.calendar.Calendar client;
     private static final HashMap<String, RoomCalendar> calendarList = new HashMap<>();
     private static final HashMap<String, Boolean> calendarStatus = new HashMap<>();
-    private static final String actualCalendar = "";
-    private static final String nextFreeRoom = "";
 
     private final String p12file;
     private final String serviceAccountEmail;
@@ -91,9 +89,9 @@ public class CalendarReader {
 
                 pullMeetings(cal);
                 calendarList.put(room, cal);
-            } catch (GoogleJsonResponseException jsonEx) {
+            } catch (final GoogleJsonResponseException jsonEx) {
                 System.out.println("GoogleJsonResponseException during API-Fetch of room "+ room + " with Code="+ jsonEx.getStatusCode() + " message="+jsonEx.getStatusMessage());
-            }catch (Exception e) {
+            } catch (final Exception e) {
                 System.out.println("Error during API-Fetch of room "+ room);
                 //e.printStackTrace();
             }
@@ -176,6 +174,21 @@ public class CalendarReader {
             }
         }
 
+    }
+
+    /**
+     * Is used to vote a room clean or dirty
+     */
+    public void roomvote(final String roomId, final boolean isClean) {
+        final RoomCalendar roomCalendar = calendarList.get(roomId);
+        if (roomCalendar == null) {
+            return;
+        }
+        if (isClean) {
+            roomCalendar.getRoomVotedClean().add(new Date());
+        } else {
+            roomCalendar.getRoomVotedDirty().add(new Date());
+        }
     }
 
     public DataTransferObject getMeetingRoomMonitorData(final String roomName) {
