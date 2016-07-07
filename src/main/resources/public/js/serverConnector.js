@@ -36,6 +36,8 @@ function fetchDataFromServer() {
         } else {
             setNextEvent(data.nextEventName, data.nextEventOrganizer, data.nextEventStartTime);
         }
+
+        loader.hide();
     }, "json");
 }
 
@@ -58,7 +60,9 @@ function giveCleanFeedback(fb) {
 }
 
 function terminateCurrentMeeting() {
-    $.get("/events/" + roomId + "/endevent", null, null, "json");
+    $.get("/events/" + roomId + "/endevent", null, function(data, textStatus, jqXHR) {
+
+    }, "json");
     setRoomFree();
 }
 
