@@ -20,20 +20,18 @@
     <!-- Room State -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="alert alert-success" id="roomBox">
+            <div class="alert alert-success" id="roomBox" style="margin-top:5px">
                 <div>
                     <p class="text-center"><strong id="roomName">Room Name</strong></p>
                 </div>
-                <div class="col-md-12">
-                    <table class="table table-condensed" style="margin-bottom:0px">
-                        <tbody>
-                        <tr>
-                            <td class="text-left" id="roomState">roomState</td>
-                            <td class="text-right" id="time">time</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-condensed" style="margin-bottom:0px">
+                    <tbody>
+                    <tr>
+                        <td class="text-left" id="roomState">roomState</td>
+                        <td class="text-right" id="time">time</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -43,7 +41,7 @@
         <div class="col-sm-12 panel panel-default">
             <div class="row">
                 <div class="col-sm-12">
-                    <table class="table table-condensed" style="margin-bottom:0px">
+                    <table class="table table-condensed" style="margin-bottom:2px">
                         <tbody>
                         <tr>
                             <td class="text-left" colspan="3">jetzt:</td>
@@ -56,7 +54,8 @@
                             <td class="text-right">endet um:</td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="2"><strong id="currentOrganizator">currentOrganizator</strong></td>
+                            <td class="text-left" colspan="2"><strong
+                                    id="currentOrganizator">currentOrganizator</strong></td>
                             <td class="text-right"><strong id="currentEndTime">currentEndTime</strong></td>
                         </tr>
                         </tbody>
@@ -70,8 +69,8 @@
     <div class="row" id="noMoreEventsBox">
         <div class="col-sm-12">
             <div class="alert alert-success">
-                <div>
-                    <span><strong>Heute keine weiteren Termine hier!</strong></span>
+                <div class="text-center">
+                    <strong>Heute keine weiteren Termine hier!</strong>
                 </div>
             </div>
         </div>
@@ -82,7 +81,7 @@
         <div class="col-sm-12 panel panel-default">
             <div class="row">
                 <div class="col-sm-12">
-                    <table class="table table-condensed" style="margin-bottom:0px">
+                    <table class="table table-condensed" style="margin-bottom:2px">
                         <tbody>
                         <tr>
                             <td class="text-left" colspan="3">danach:</td>
@@ -107,7 +106,7 @@
 
     <div class="row" id="nextFreeRoomBox">
         <div class="col-sm-12 panel panel-default">
-            <table class="table table-condensed" style="margin-bottom:0px">
+            <table class="table table-condensed" style="margin-bottom:2px">
                 <tbody>
                 <tr>
                     <td class="text-left" colspan="2">nächster freier Raum</td>
@@ -142,12 +141,14 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-success btn-lg btn-block"
-                                                data-dismiss="modal" id="btnCleanTrue" style="margin-top:50px; margin-bottom:50px;">ja
+                                                data-dismiss="modal" id="btnCleanTrue"
+                                                style="margin-top:50px; margin-bottom:50px;">ja
                                         </button>
                                     </div>
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-danger btn-lg btn-block"
-                                                data-dismiss="modal" id="btnCleanFales" style="margin-top:50px; margin-bottom:50px;">nein
+                                                data-dismiss="modal" id="btnCleanFalse"
+                                                style="margin-top:50px; margin-bottom:50px;">nein
                                         </button>
                                     </div>
                                 </div>
@@ -182,12 +183,14 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-danger btn-lg btn-block"
-                                                data-dismiss="modal" id="btnTerminateEvent" style="margin-top:50px; margin-bottom:50px;">beenden
+                                                data-dismiss="modal" id="btnTerminateEvent"
+                                                style="margin-top:50px; margin-bottom:50px;">beenden
                                         </button>
                                     </div>
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-primary btn-lg btn-block"
-                                                data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nicht beenden
+                                                data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nicht
+                                            beenden
                                         </button>
                                     </div>
                                 </div>

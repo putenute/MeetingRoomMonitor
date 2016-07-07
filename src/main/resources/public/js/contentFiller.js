@@ -151,3 +151,7 @@ function setNextFreeRoom(room) {
 function setFreeUntil(time) {
     freeUntil.html('frei bis: ' + time);
 }
+
+function setTime(timeString) {
+    time.html(timeString);
+}
