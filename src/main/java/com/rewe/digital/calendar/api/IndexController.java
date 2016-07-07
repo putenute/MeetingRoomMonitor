@@ -51,14 +51,15 @@ public class IndexController {
         return calReader.getMeetingRoomMonitorData(roomId);
     }
 
-    @RequestMapping("/vote/{roomId}/clean")
-    public void voteRoomClean(@PathVariable("roomId") final String roomId) {
-        calReader.roomvote(roomId, true);
+    @RequestMapping("/vote/{roomId}/{action}")
+    public void voteRoomClean(@PathVariable("roomId") final String roomId,
+            @PathVariable("action") final String action) {
+        if (action.equalsIgnoreCase("clean")) {
+            calReader.roomvote(roomId, true);
+        } else if (action.equalsIgnoreCase("dirty")) {
+            calReader.roomvote(roomId, false);
+        } else if (action.equalsIgnoreCase("reset")) {
+            calReader.resetVote(roomId);
+        }
     }
-
-    @RequestMapping("/vote/{roomId}/dirty")
-    public void voteRoomDirty(@PathVariable("roomId") final String roomId) {
-        calReader.roomvote(roomId, false);
-    }
-
 }

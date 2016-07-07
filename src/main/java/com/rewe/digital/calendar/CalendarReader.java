@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +27,8 @@ import java.util.Map;
 
 @Component
 public class CalendarReader {
+
+    private final NotificationService notificationService;
 
     public static final Map<String, String> knownRooms = new HashMap<>();
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -42,10 +43,12 @@ public class CalendarReader {
 
     @Inject
     public CalendarReader(@Value("${cal.p12file}") final String p12file,
-            @Value("${cal.serviceAccountEmail}") final String serviceAccountEmail) {
+            @Value("${cal.serviceAccountEmail}") final String serviceAccountEmail,
+            final NotificationService notificationService) {
 
         this.p12file = p12file;
         this.serviceAccountEmail = serviceAccountEmail;
+        this.notificationService = notificationService;
         knownRooms.put("Room - RED", "rewe-digital.com_2d34333934343339393831@resource.calendar.google.com");
         knownRooms.put("Room - YELLOW", "rewe-digital.com_2d34343833323535383331@resource.calendar.google.com");
         knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
@@ -59,23 +62,15 @@ public class CalendarReader {
 
     public void createCalendars() {
         try {
-
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             final Credential credential =
                     authorize(serviceAccountEmail, p12file);
             client = new com.google.api.services.calendar.Calendar.Builder(
                     httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
 
-
             refreshMeetingsForAllCalendars();
-
-
-        } catch (final IOException e) {
-            e.printStackTrace();
-        } catch (final GeneralSecurityException e) {
-            e.printStackTrace();
         } catch (final Exception e) {
-            e.printStackTrace();
+            System.out.print(e.getLocalizedMessage());
         }
     }
 
@@ -86,7 +81,6 @@ public class CalendarReader {
                             room);
 
             try {
-
                 pullMeetings(cal);
                 calendarList.put(room, cal);
             } catch (final GoogleJsonResponseException jsonEx) {
@@ -113,8 +107,7 @@ public class CalendarReader {
     public static void updateStatus(final RoomCalendar calendar) {
         if (calendar.getStatus()) {
             calendarStatus.put(calendar.getRoomName(), true);
-        }
-        else {
+        } else {
             calendarStatus.put(calendar.getRoomName(), false);
         }
     }
@@ -184,10 +177,14 @@ public class CalendarReader {
         if (roomCalendar == null) {
             return;
         }
+        roomCalendar.getMeetingAt()
+        String lastEventInRoom = findLastMeetingInRoom();
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
+            notificationService.notifyOrganizerClean();
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
+            notificationService.notifyOrganizerDirty();
         }
     }
 
@@ -245,5 +242,14 @@ public class CalendarReader {
         dataTransferObject.setNextFreeRoomName("Room DeineMudda");
 
         return dataTransferObject;
+    }
+
+    public void resetVote(final String roomId) {
+        final RoomCalendar roomCalendar = calendarList.get(roomId);
+        if (roomCalendar == null) {
+            return;
+        }
+        roomCalendar.getRoomVotedClean().clear();
+        roomCalendar.getRoomVotedDirty().clear();
     }
 }

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class RoomCalendar {
 
@@ -61,6 +62,20 @@ public class RoomCalendar {
         for (final Meeting meeting : meetings) {
             if (meeting.getStartTime().before(time) && meeting.getEndTime().after(time))
                return meeting;
+        }
+        return null;
+    }
+
+    public Meeting getMeetingBefore(final Date time) {
+        final Optional<Meeting> first = meetings
+                .stream()
+                .sorted((e1, e2) -> e1.getEndTime()
+                        .compareTo(e2.getEndTime())).findFirst();
+
+        for (final Meeting meeting : meetings) {
+            if (meeting.getStartTime().before(time) && meeting.getEndTime().after(time)) {
+                return meeting;
+            }
         }
         return null;
     }
