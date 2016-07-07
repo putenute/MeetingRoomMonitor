@@ -18,6 +18,7 @@ import com.google.api.services.gmail.GmailScopes;
 import com.rewe.digital.calendar.api.DataTransferObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -116,6 +117,7 @@ public class CalendarReader {
                 .setServiceAccountScopes(Arrays.asList(CalendarScopes.CALENDAR, GmailScopes
                         .GMAIL_SEND, GmailScopes.GMAIL_COMPOSE))
                 .setServiceAccountPrivateKeyFromP12File(new File(p12File))
+                .setServiceAccountUser("meetingroommonitor@appspot.gserviceaccount.com")
                 .build();
         return credential;
     }
@@ -167,16 +169,21 @@ public class CalendarReader {
                                         new Date(event.getEnd().getDateTime().getValue()));
                                 calendar.addMeeting(meeting);
                             } else {
-                                for (final EventAttendee attendee : event.getAttendees()) {
-                                    if (attendee.getResource() != null) {
-                                        if (attendee.getResource() == true && attendee.getDisplayName().equals(calendar.getRoomName()) && !attendee.getResponseStatus().equals("declined")) {
-                                            final Meeting meeting = new Meeting(organizer, event.getSummary(),
-                                                    new Date(event.getStart().getDateTime().getValue()),
-                                                    new Date(event.getEnd().getDateTime().getValue()));
-                                            calendar.addMeeting(meeting);
+                                if (!CollectionUtils.isEmpty(event.getAttendees())) {
+                                    for (final EventAttendee attendee : event.getAttendees()) {
+                                        if (attendee.getResource() != null) {
+                                            if (attendee.getResource() == true &&
+                                                    attendee.getDisplayName().equals(calendar.getRoomName()) &&
+                                                    !attendee.getResponseStatus().equals("declined")) {
+                                                final Meeting meeting = new Meeting(organizer, event.getSummary(),
+                                                        new Date(event.getStart().getDateTime().getValue()),
+                                                        new Date(event.getEnd().getDateTime().getValue()));
+                                                calendar.addMeeting(meeting);
+                                            }
                                         }
                                     }
                                 }
+
                             }
                         }
                 }
@@ -189,27 +196,27 @@ public class CalendarReader {
      * Is used to vote a room clean or dirty
      */
     public void roomvote(final String roomId, final boolean isClean) {
-        final RoomCalendar roomCalendar = calendarList.get(roomId) == null ? new RoomCalendar("Wurst", "Käse") :
+        final RoomCalendar roomCalendar = calendarList.get(roomId) == null ? new RoomCalendar("", "") :
                 calendarList.get(roomId);
-        //roomCalendar.getMeetingAt()
+
         final Meeting lastEventInRoom = roomCalendar.getLastFinishedMeetingBefore(new Date());
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
-            try {
+            /*try {
                 notificationService
                         .notifyOrganizerClean(lastEventInRoom, authorize(serviceAccountEmail, p12file),
                                 httpTransport);
             } catch (final Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
-            try {
+            /*try {
                 notificationService
                         .notifyOrganizerDirty(lastEventInRoom, authorize(serviceAccountEmail, p12file), httpTransport);
             } catch (final Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
     }
