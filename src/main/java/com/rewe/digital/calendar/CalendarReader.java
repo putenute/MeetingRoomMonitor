@@ -24,6 +24,8 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -214,10 +216,13 @@ public class CalendarReader {
         final RoomCalendar roomCalendar = calendarList.get(roomId) == null ? new RoomCalendar("", "") :
                 calendarList.get(roomId);
 
-        final Meeting lastEventInRoom = roomCalendar.getLastFinishedMeetingBefore(new Date());
+        final Format formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        final String dateString = formatter.format(new Date());
+
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
-            String tweet = ":) Die Sauberkeit des Raums '" + roomId.toUpperCase() + "' wurde als vorbildlich " +
+            String tweet = dateString + ": :) Die Sauberkeit des Raums '" + roomId.toUpperCase() + "' wurde als " +
+                    "vorbildlich " +
                     "bezeichnet!";
             if (tweet.length() > 140) {
                 tweet = ":) Die Sauberkeit eines Raums wurde als vorbildlich bezeichnet!";
@@ -226,7 +231,7 @@ public class CalendarReader {
                     tweet);
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
-            String tweet = ":/ Die Sauberkeit des Raums '" + roomId.toUpperCase() +
+            String tweet = dateString + ": :/ Die Sauberkeit des Raums '" + roomId.toUpperCase() +
                     " wurde als mangelhaft bewertet!";
             if (tweet.length() > 140) {
                 tweet = ":/ Die Sauberkeit eines Raums wurde als mangelhaft bezeichnet!";
