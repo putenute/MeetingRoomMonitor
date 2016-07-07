@@ -9,6 +9,10 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.stereotype.Component;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
@@ -165,4 +169,15 @@ public class NotificationService {
         return email;
     }
 
+    public void postTweet(final String text) {
+        // The factory instance is re-useable and thread safe.
+        final Twitter twitter = TwitterFactory.getSingleton();
+        Status status = null;
+        try {
+            status = twitter.updateStatus(text);
+            System.out.println("Successfully updated the status to [" + status.getText() + "].");
+        } catch (final TwitterException e) {
+            e.printStackTrace();
+        }
+    }
 }

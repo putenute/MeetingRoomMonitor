@@ -56,7 +56,6 @@ function giveCleanFeedback(fb) {
         $.get("/vote/" + roomId + "/clean", null, null, "json");
     else
         $.get("/vote/" + roomId + "/dirty", null, null, "json");
-    alert('feedback sent');
 }
 
 function terminateCurrentMeeting() {
