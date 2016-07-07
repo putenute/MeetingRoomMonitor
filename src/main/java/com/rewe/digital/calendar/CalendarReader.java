@@ -23,9 +23,12 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class CalendarReader {
+
+    public static final Map<String, String> knownRooms = new HashMap<>();
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "calendar-reader";
     private static HttpTransport httpTransport;
@@ -35,16 +38,22 @@ public class CalendarReader {
     private static final String actualCalendar = "";
     private static final String nextFreeRoom = "";
 
-    private static String roomName;
+    private final String p12file;
+    private final String serviceAccountEmail;
 
     @Inject
     public CalendarReader(@Value("${cal.p12file}") final String p12file,
-                          @Value("${cal.serviceAccountEmail}")  final String serviceAccountEmail,
-                          @Value("${cal.roomName}") final String roomName
-    ) {
-        try {
+            @Value("${cal.serviceAccountEmail}") final String serviceAccountEmail) {
 
-            this.roomName = roomName;
+        this.p12file = p12file;
+        this.serviceAccountEmail = serviceAccountEmail;
+        knownRooms.put("Room - RED", "rewe-digital.com_2d34333934343339393831@resource.calendar.google.com");
+        //knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
+        createCalendars();
+    }
+
+    public void createCalendars() {
+        try {
 
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             final Credential credential =
@@ -52,14 +61,8 @@ public class CalendarReader {
             client = new com.google.api.services.calendar.Calendar.Builder(
                     httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
 
-            RoomCalendar cal =
-                        new RoomCalendar("rewe-digital.com_2d34333934343339393831@resource.calendar.google.com",
-                                roomName);
-            calendarList.put(roomName, cal);
-            calendarStatus.put(roomName, true);
 
-            pullMeetings(cal);
-
+            refreshMeetingsForAllCalendars();
             //TODO Für andere calendar machen!             updateStatus(cal);
 
             /* TODO: Service Account hat keinen Zugriff auf Räume !
@@ -98,6 +101,18 @@ public class CalendarReader {
             e.printStackTrace();
         } catch (final Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void refreshMeetingsForAllCalendars(){
+        for (final String room : knownRooms.keySet()) {
+            final RoomCalendar cal =
+                    new RoomCalendar(knownRooms.get(room),
+                            room);
+            calendarList.put(room, cal);
+
+
+            pullMeetings(cal);
         }
     }
 
@@ -182,19 +197,19 @@ public class CalendarReader {
         }
     }
 
-    public DataTransferObject getMeetingRoomMonitorData() {
+    public DataTransferObject getMeetingRoomMonitorData(final String roomName) {
         final DataTransferObject dataTransferObject = new DataTransferObject();
 
 
         // Get all meetings for this room
-        RoomCalendar calendar = calendarList.get(roomName);
+        final RoomCalendar calendar = calendarList.get(roomName);
         dataTransferObject.setRoomName(roomName);
 
 
 
         // Current Meeting
-        Date now = new Date();
-        Meeting actualMeeting = calendar.getMeetingAt(now);
+        final Date now = new Date();
+        final Meeting actualMeeting = calendar.getMeetingAt(now);
         if (actualMeeting != null) {
             dataTransferObject.setCurrentEventEndTime(actualMeeting.getEndTimePretty());
             dataTransferObject.setCurrentEventName( actualMeeting.getTitle());
@@ -209,7 +224,7 @@ public class CalendarReader {
 
         // Next meeting(s)
         if (calendar.getMeetingsAfter(now).size() > 0) {
-            Meeting nextMeeting = calendar.getMeetingsAfter(now).get(0);
+            final Meeting nextMeeting = calendar.getMeetingsAfter(now).get(0);
             if (nextMeeting != null) {
                 dataTransferObject.setNextEventEndTime(nextMeeting.getEndTimePretty());
                 dataTransferObject.setNextEventName(nextMeeting.getTitle());
@@ -220,7 +235,6 @@ public class CalendarReader {
             }
 
         }
-
 
 
         // Next free meetings
