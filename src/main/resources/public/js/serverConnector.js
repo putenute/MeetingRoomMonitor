@@ -13,6 +13,8 @@ $('document').ready(function() {
     btnCleanTrue.on('click', function() { giveCleanFeedback(true); });
     btnCleanFalse.on('click', function() { giveCleanFeedback(false); });
 
+    btnTerminateEvent.on('click', function() { terminateCurrentMeeting(); });
+
     window.setInterval(function() {
         fetchDataFromServer();
         setTime(createCurrentTimeString());
@@ -26,9 +28,7 @@ function fetchDataFromServer() {
             setRoomFree();
         } else {
             setRoomOccupied(data.currentEventName, data.currentEventOrganizer, data.currentEventEndTime);
-
-            setNextFreeRoom(data.nextFreeRoomName);
-            setFreeUntil(data.nextFreeRoomFreeUntil);
+            setNextFreeRoom(data.nextFreeRoomName, data.nextFreeRoomFreeUntil);
         }
 
         if (data.nextEventName == "KEIN WEITERER TERMIN") {
@@ -57,9 +57,16 @@ function giveCleanFeedback(fb) {
     alert('feedback sent');
 }
 
+function terminateCurrentMeeting() {
+    $.get("/events/" + roomId + "/endevent", null, null, "json");
+    setRoomFree();
+}
+
 function createCurrentTimeString() {
     var curTime = new Date(Date.now());
     var hrs = curTime.getHours();
     var mins = curTime.getMinutes();
+    if (mins < 10)
+        mins = '0' + mins;
     return hrs + ':' + mins;
 }

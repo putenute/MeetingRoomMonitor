@@ -24,6 +24,8 @@ var roomBox,            // container for room details
     freeUntil,
     
     noMoreEventsBox,
+
+    noFreeRoomsBox,
     
     btnCleanTrue,
     btnCleanFalse,
@@ -56,6 +58,9 @@ $('document').ready(function () {
     freeUntil = $('#freeUntil');
     
     noMoreEventsBox = $('#noMoreEventsBox');
+
+    noFreeRoomsBox = $('#noFreeRoomsBox');
+    noFreeRoomsBox.hide();
     
     btnCleanTrue = $('#btnCleanTrue');
     btnCleanFalse = $('#btnCleanFalse');
@@ -144,8 +149,17 @@ function setNextEnd(end) {
     nextEndTime.html(end);
 }
 
-function setNextFreeRoom(room) {
-    nextFreeRoom.html(room);
+function setNextFreeRoom(room, time) {
+    if (room == "") {
+        nextFreeRoomBox.hide();
+        noFreeRoomsBox.show();
+    } else {
+        nextFreeRoom.html(room);
+        setFreeUntil(time);
+
+        nextFreeRoomBox.show();
+        noFreeRoomsBox.hide();
+    }
 }
 
 function setFreeUntil(time) {
