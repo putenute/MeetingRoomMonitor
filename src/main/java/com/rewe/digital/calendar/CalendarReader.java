@@ -27,8 +27,8 @@ import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
 
 @Component
 public class CalendarReader {
@@ -58,7 +58,7 @@ public class CalendarReader {
         this.notificationService = notificationService;
         knownRooms.put("Room - RED", "rewe-digital.com_2d34333934343339393831@resource.calendar.google.com");
         knownRooms.put("Room - YELLOW", "rewe-digital.com_2d34343833323535383331@resource.calendar.google.com");
-   //     knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
+        knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
         knownRooms.put("Room - PETROL", "rewe-digital.com_2d38393135363131393037@resource.calendar.google.com");
         knownRooms.put("Room - GREEN", "rewe-digital.com_323733373636393237@resource.calendar.google.com");
         knownRooms.put("Room - ORANGE", "rewe-digital.com_35393432353237302d313938@resource.calendar.google.com");
@@ -173,7 +173,8 @@ public class CalendarReader {
                                 }
                             }
                             //CHECK: If visibility = private, then there will be no attendees!
-                            if (event.getVisibility() != null && event.getVisibility().equals("private")) {
+                            if (event.getVisibility() != null && event.getVisibility().equals("private") || event
+                                    .getVisibility() == null) {
                                 final Meeting meeting = new Meeting(event.getId(), "Privat", "Privater Termin",
                                         new Date(event.getStart().getDateTime().getValue()),
                                         new Date(event.getEnd().getDateTime().getValue()));
@@ -296,11 +297,11 @@ public class CalendarReader {
 
 
         //Find free Meetingroom in known rooms
-        Iterator iter = calendarList.entrySet().iterator();
+        final Iterator iter = calendarList.entrySet().iterator();
         while (iter.hasNext()) {
-            Map.Entry pair = (Map.Entry) iter.next();
-            String currentRoomName = (String) pair.getKey();
-            RoomCalendar currentCal = (RoomCalendar) pair.getValue();
+            final Map.Entry pair = (Map.Entry) iter.next();
+            final String currentRoomName = (String) pair.getKey();
+            final RoomCalendar currentCal = (RoomCalendar) pair.getValue();
             if (currentCal.getStatus() == true ) {
                 if (!(currentRoomName.equals(roomName))){
                     nextFreeRoom = (String) pair.getKey();
