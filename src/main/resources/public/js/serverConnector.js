@@ -15,27 +15,16 @@ function fetchDataFromServer() {
         if (data.currentEventName == "JETZT KEIN TERMIN") {
             setRoomFree();
         } else {
-            setRoomOccupied();
-            setCurrentTitle(data.currentEventName);
-            setCurrentOwner(data.currentEventOrganizer);
-            setCurrentStart(data.currentEventStartTime);
-            setCurrentEnd(data.currentEventEndTime);
+            setRoomOccupied(data.currentEventName, data.currentEventOrganizer, data.currentEventEndTime);
+
+            setNextFreeRoom(data.nextFreeRoomName);
+            setFreeUntil(data.nextFreeRoomFreeUntil);
         }
 
         if (data.nextEventName == "KEIN WEITERER TERMIN") {
-            $('#nextMeeting').hide();
-            $('#noMoreEvents').show();
+            noFurtherEvents();
         } else {
-            $('#nextMeeting').show();
-            $('#noMoreEvents').hide();
-
-            setNextTitle(data.nextEventName);
-            setNextOwner(data.nextEventOrganizer);
-            setNextStart(data.nextEventStartTime);
-            setNextEnd(data.nextEventEndTime);
+            setNextEvent(data.nextEventName, data.nextEventOrganizer, data.nextEventStartTime);
         }
-        
-        setNextFreeRoom(data.nextFreeRoomName);
-        setFreeUntil(data.nextFreeRoomFreeUntil);
     }, "json");
 }

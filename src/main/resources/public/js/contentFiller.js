@@ -5,44 +5,64 @@
 var roomBox,            // container for room details
     roomName,           // displayed room name
     roomState,          // displayed room state (frei/belegt)
+    time,
+    
     currentTitle,
-    currentOwner,
-    currentStart,
-    currentEnd,
+    currentEventBox,
+    currentOrganizator,
+    currentStartTime,
+    currentEndTime,
+    
+    nextEventBox,
     nextTitle,
-    nextOwner,
-    nextStart,
-    nextEnd,
+    nextOrganizator,
+    nextStartTime,
+    nextEndTime,
+    
+    nextFreeRoomBox,
     nextFreeRoom,
     freeUntil,
+    
+    noMoreEventsBox,
+    
     btnCleanTrue,
     btnCleanFalse,
     btnFeedbackPos,
     btnFeedbackNeutral,
     btnFeedbackNeg,
-    btnTerminateCurrent;
+    btnTerminateEvent;
 
 // get all relevant gui elements and set click listeners
 $('document').ready(function () {
     roomBox = $('#roomBox');
     roomName = $('#roomName');
     roomState = $('#roomState');
+    time = $('#time');
+    
+    currentEventBox = $('#currentEventBox');
     currentTitle = $('#currentTitle');
-    currentOwner = $('#currentowner');
-    currentStart = $('#currentStart');
-    currentEnd = $('#currentEnd');
+    currentOrganizator = $('#currentOrganizator');
+    currentStartTime = $('#currentStartTime');
+    currentEndTime = $('#currentEndTime');
+    
+    nextEventBox = $('#nextEventBox');
     nextTitle = $('#nextTitle');
-    nextOwner = $('#nextOwner');
-    nextStart = $('#nextstart');
-    nextEnd = $('#nextEnd');
+    nextOrganizator = $('#nextOrganizator');
+    nextStartTime = $('#nextStartTime');
+    nextEndTime = $('#nextEndTime');
+    
+    nextFreeRoomBox = $('#nextFreeRoomBox');
     nextFreeRoom = $('#nextFreeRoom');
     freeUntil = $('#freeUntil');
+    
+    noMoreEventsBox = $('#noMoreEventsBox');
+    
     btnCleanTrue = $('#btnCleanTrue');
     btnCleanFalse = $('#btnCleanFalse');
-    btnFeedbackPos = $('#btnFeedbackPos');
-    btnFeedbackNeutral = $('#btnFeedbackNeutral');
-    btnFeedbackNeg = $('#btnFeedbackNeg');
-    btnTerminateCurrent = $('#btnTerminateCurrent');
+    //btnFeedbackPos = $('#btnFeedbackPos');
+    //btnFeedbackNeutral = $('#btnFeedbackNeutral');
+    //btnFeedbackNeg = $('#btnFeedbackNeg');
+    btnTerminateEvent = $('#btnTerminateEvent');
 });
 
 function setRoomFree() {
@@ -51,22 +71,41 @@ function setRoomFree() {
         roomBox.addClass("alert-success");
     }
 
-    $('#nextFreeRoomBox').hide();
-    btnTerminateCurrent.addClass("disabled");
+    currentEventBox.hide();
+    nextFreeRoomBox.hide();
+    btnTerminateEvent.addClass("disabled");
 
     roomState.html("frei");
 }
 
-function setRoomOccupied() {
+function setRoomOccupied(title, owner, end) {
     if (roomBox.hasClass("alert-success")) {
         roomBox.removeClass("alert-success");
         roomBox.addClass("alert-danger");
     }
 
-    $('#nextFreeRoomBox').show();
-    btnTerminateCurrent.removeClass("disabled");
+    currentEventBox.show();
+    nextFreeRoomBox.show();
+    btnTerminateEvent.removeClass("disabled");
 
+    setCurrentTitle(title);
+    setCurrentOwner(owner);
+    setCurrentEnd(end);
     roomState.html("besetzt");
+}
+
+function noFurtherEvents() {
+    nextEventBox.hide();
+    noMoreEventsBox.show();
+}
+
+function setNextEvent(title, owner, start) {
+    nextEventBox.show();
+    noMoreEventsBox.hide();
+
+    setNextTitle(title);
+    setNextOwner(owner);
+    setNextStart(start);
 }
 
 function setRoomName(name) {
@@ -78,15 +117,15 @@ function setCurrentTitle(title) {
 }
 
 function setCurrentOwner(owner) {
-    currentOwner.html(owner);
+    currentOrganizator.html(owner);
 }
 
 function setCurrentStart(start) {
-    currentStart.html(start);
+    currentStartTime.html(start);
 }
 
 function setCurrentEnd(end) {
-    currentEnd.html(end);
+    currentEndTime.html(end);
 }
 
 function setNextTitle(title) {
@@ -94,15 +133,15 @@ function setNextTitle(title) {
 }
 
 function setNextOwner(owner) {
-    nextOwner.html(owner);
+    nextOrganizator.html(owner);
 }
 
 function setNextStart(start) {
-    nextStart.html(start);
+    nextStartTime.html(start);
 }
 
 function setNextEnd(end) {
-    nextEnd.html(end);
+    nextEndTime.html(end);
 }
 
 function setNextFreeRoom(room) {

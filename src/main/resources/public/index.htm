@@ -2,175 +2,208 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/customButtons.css">
+    <title>MeetingMonitor 2.0</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
 </head>
-
-
 <body>
-<br>
+
 <div class="container-fluid">
+    <!-- Room State -->
     <div class="row">
-        <!-- left colum -->
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4 class="text-center">War der Raum beim Betreten sauber?</h4>
-                    </div>
+        <div class="col-sm-12">
+            <div class="alert alert-success" id="roomBox">
+                <div>
+                    <p class="text-center"><strong id="roomName">Room Name</strong></p>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 text-center"
-                         style="height:191px; display: table-cell; vertical-align: middle;">
-                        <button type="button" class="btn btn-success btn-lg customButton" style="margin-top:57px" id="btnCleanTrue">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 text-center"
-                         style="height:191px; display: table-cell; vertical-align: middle;">
-                        <button type="button" class="btn btn-danger btn-lg customButton" style="margin-top:50px" id="btnCleanFalse">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
-                        </button>
-                    </div>
+                <div class="col-md-12">
+                    <table class="table table-condensed" style="margin-bottom:0px">
+                        <tbody>
+                        <tr>
+                            <td class="text-left" id="roomState">roomState</td>
+                            <td class="text-right" id="time">time</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- mid colum -->
+    <!-- Current Event -->
+    <div class="row" id="currentEventBox">
+        <div class="col-sm-12 panel panel-default">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-condensed" style="margin-bottom:0px">
+                        <tbody>
+                        <tr>
+                            <td class="text-left" colspan="3">jetzt:</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" colspan="3"><p class="lead" id="currentTitle">currentTitle</p></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" colspan="2">Organisator</td>
+                            <td class="text-right">endet um:</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" colspan="2"><strong id="currentOrganizator">currentOrganizator</strong></td>
+                            <td class="text-right"><strong id="currentEndTime">currentEndTime</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- no more Events box -->
+    <div class="row" id="noMoreEventsBox">
+        <div class="col-sm-12">
+            <div class="alert alert-success">
+                <div>
+                    <span><strong>Heute keine weiteren Termine hier!</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Event -->
+    <div class="row" id="nextEventBox">
+        <div class="col-sm-12 panel panel-default">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-condensed" style="margin-bottom:0px">
+                        <tbody>
+                        <tr>
+                            <td class="text-left" colspan="3">danach:</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" colspan="3"><p class="lead" id="nextTitle">nextTitle</p></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" colspan="2">Organisator</td>
+                            <td class="text-right">beginnt um:</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" colspan="2"><strong id="nextOrganizator">nextOrganizator</strong></td>
+                            <td class="text-right"><strong id="nextStartTime">nextStartTime</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="nextFreeRoomBox">
+        <div class="col-sm-12 panel panel-default">
+            <table class="table table-condensed" style="margin-bottom:0px">
+                <tbody>
+                <tr>
+                    <td class="text-left" colspan="2">nächster freier Raum</td>
+                    <td class="text-right">frei bis:</td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong id="nextFreeRoom">nextFreeRoom</strong></td>
+                    <td class="text-right"><strong id="freeUntil">freeUntil</strong></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+
         <div class="col-sm-6">
-            <div class="row">
-                <div class="alert alert-success col-sm-12" id="roomBox">
-                    <h1 class="text-center" id="roomName">Room RED</h1>
-                    <h3 class="text-center" id="roomState">frei</h3>
+            <button type="button" class="btn btn-default btn-block" data-toggle="modal"
+                    data-target="#modal-container-448149">War der Raum beim Betreten sauber?
+            </button>
+
+            <div class="modal fade" id="modal-container-448149" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">War der Raum beim Betreten sauber?</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-success btn-lg btn-block"
+                                                data-dismiss="modal" id="btnCleanTrue" style="margin-top:50px; margin-bottom:50px;">ja
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-danger btn-lg btn-block"
+                                                data-dismiss="modal" id="btnCleanFales" style="margin-top:50px; margin-bottom:50px;">nein
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">abbrechen</button>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
-
-
-            <div id="" style="overflow-y: scroll; height:273px;">
-                <!-- current meeting box -->
-                <div class="row" id="currentMeeting">
-                    <div class="panel panel-default col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h4 class="text-center">jetzt</h4>
-                                <h1 class="text-center text-capitalize" id="currentTitle">Termin Titel</h1>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <h3>Organisator:</h3>
-                                <p id="currentOwner">toller name</p>
-                            </div>
-                            <div class="col-sm-2">
-                                <h3 class="text-center">von:</h3>
-                                <p class="text-center" id="currentStart">startzeit</p>
-                            </div>
-                            <div class="col-sm-2">
-                                <h3 class="text-center">bis:</h3>
-                                <p class="text-center" id="currentEnd">endzeit</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- next meeting box -->
-                <div class="row" id="nextMeeting">
-                    <div class="panel panel-default col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h4 class="text-center">danach</h4>
-                                <h1 class="text-center text-capitalize" id="nextTitle">Termin Titel</h1>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <h3>Organisator:</h3>
-                                <p id="nextOwner">toller name</p>
-                            </div>
-                            <div class="col-sm-2">
-                                <h3 class="text-center">von:</h3>
-                                <p class="text-center" id="nextStart">startzeit</p>
-                            </div>
-                            <div class="col-sm-2">
-                                <h3 class="text-center">bis:</h3>
-                                <p class="text-center" id="nextEnd">endzeit</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="alert alert-success col-sm-12" id="noMoreEvents">
-                        <h3 class="text-center">Heute keine Termine mehr!</h3>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="panel panel-default col-sm-12" id="nextFreeRoomBox">
-                        <h4 class="text-center">nächster freier Raum</h4>
-                        <p class="text-center" id="nextFreeRoom"></p>
-                        <p class="text-center" id="freeUntil"></p>
-                    </div>
-                </div>
-            </div>
-
 
         </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default btn-block" data-toggle="modal"
+                    data-target="#modal-container-750565">aktuellen Termin beenden
+            </button>
 
-        <!-- right colum -->
-        <div class="col-sm-3">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="panel panel-default" style="height:376px;">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h4 class="text-center">Meeting Feedback</h4>
+            <div class="modal fade" id="modal-container-750565" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Aktuellen Termin beenden?</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-danger btn-lg btn-block"
+                                                data-dismiss="modal" id="btnTerminateEvent" style="margin-top:50px; margin-bottom:50px;">beenden
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-primary btn-lg btn-block"
+                                                data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nicht beenden
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-center" style="height:112px;">
-                                <button type="button" class="btn btn-success btn-lg customButton" id="btnFeedbackPos">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-center" style="height:112px;">
-                                <button type="button" class="btn btn-warning btn-lg customButton" id="btnFeedbackNeutral">
-                                    <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-center" style="height:112px;">
-                                <button type="button" class="btn btn-danger btn-lg customButton" id="btnFeedbackNeg">
-                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span></span>
-                                    </button>
-                            </div>
-                        </div>
+
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <button type="button" class="btn btn-danger btn-lg btn-block disabled" id="btnTerminateCurrent">Termin beenden</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="./js/bootstrap.min.js"></script>
-<script src="./js/contentFiller.js"></script>
-<script src="./js/serverConnector.js"></script>
-<script>
-    $('#noMoreEvents').hide();
-    $('#nextFreeRoomBox').hide();
-</script>
 
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/contentFiller.js"></script>
+<script src="js/serverConnector.js"></script>
+</body>
 </html>
