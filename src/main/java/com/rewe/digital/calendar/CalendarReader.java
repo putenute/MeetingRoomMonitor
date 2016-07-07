@@ -1,6 +1,7 @@
 package com.rewe.digital.calendar;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -93,9 +94,11 @@ public class CalendarReader {
                 calendarList.put(room, cal);
             } catch (GoogleJsonResponseException jsonEx) {
                 System.out.println("GoogleJsonResponseException during API-Fetch of room "+ room + " with Code="+ jsonEx.getStatusCode() + " message="+jsonEx.getStatusMessage());
+            } catch (TokenResponseException oauthEx) {
+                System.out.println("Oauth2-TokenException during API-Fetch of room "+ room + " with Code="+ oauthEx.getStatusCode() + " message="+oauthEx.getStatusMessage());
             }catch (Exception e) {
                 System.out.println("Error during API-Fetch of room "+ room);
-                //e.printStackTrace();
+                e.printStackTrace();
             }
 
         }
