@@ -27,14 +27,14 @@ function fetchDataFromServer() {
         if (data.currentEventName == "JETZT KEIN TERMIN") {
             setRoomFree();
         } else {
-            setRoomOccupied(data.currentEventName, data.currentEventOrganizer, data.currentEventEndTime);
+            setRoomOccupied(data.currentEventName, data.currentEventOrganizer, data.currentEventStartTime, data.currentEventEndTime);
             setNextFreeRoom(data.nextFreeRoomName, data.nextFreeRoomFreeUntil);
         }
 
         if (data.nextEventName == "KEIN WEITERER TERMIN") {
             noFurtherEvents();
         } else {
-            setNextEvent(data.nextEventName, data.nextEventOrganizer, data.nextEventStartTime);
+            setNextEvent(data.nextEventName, data.nextEventOrganizer, data.nextEventStartTime, data.nextEventEndTime);
         }
 
         loader.hide();
