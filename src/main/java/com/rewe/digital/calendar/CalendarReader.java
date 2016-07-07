@@ -1,6 +1,7 @@
 package com.rewe.digital.calendar;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -37,6 +38,8 @@ public class CalendarReader {
     private static com.google.api.services.calendar.Calendar client;
     private static final HashMap<String, RoomCalendar> calendarList = new HashMap<>();
     private static final HashMap<String, Boolean> calendarStatus = new HashMap<>();
+    private static final String actualCalendar = "";
+    private static final String nextFreeRoom = "";
 
     private final String p12file;
     private final String serviceAccountEmail;
@@ -85,9 +88,12 @@ public class CalendarReader {
                 calendarList.put(room, cal);
             } catch (final GoogleJsonResponseException jsonEx) {
                 System.out.println("GoogleJsonResponseException during API-Fetch of room "+ room + " with Code="+ jsonEx.getStatusCode() + " message="+jsonEx.getStatusMessage());
+            } catch (final TokenResponseException oauthEx) {
+                System.out.println("Oauth2-TokenException during API-Fetch of room " + room + " with Code=" +
+                        oauthEx.getStatusCode() + " message=" + oauthEx.getStatusMessage());
             } catch (final Exception e) {
                 System.out.println("Error during API-Fetch of room "+ room);
-                //e.printStackTrace();
+                e.printStackTrace();
             }
 
         }
@@ -177,15 +183,16 @@ public class CalendarReader {
         if (roomCalendar == null) {
             return;
         }
-        roomCalendar.getMeetingAt()
-        String lastEventInRoom = findLastMeetingInRoom();
+        //roomCalendar.getMeetingAt()
+        //String lastEventInRoom = findLastMeetingInRoom();
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
-            notificationService.notifyOrganizerClean();
+            //notificationService.notifyOrganizerClean();
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
-            notificationService.notifyOrganizerDirty();
+            //notificationService.notifyOrganizerDirty();
         }
+
     }
 
     public DataTransferObject getMeetingRoomMonitorData(final String roomName) {
