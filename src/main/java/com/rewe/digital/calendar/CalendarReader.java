@@ -94,9 +94,14 @@ public class CalendarReader {
 
     public void refreshMeetingsForAllCalendars(){
         for (final String room : knownRooms.keySet()) {
-            final RoomCalendar cal =
-                    new RoomCalendar(knownRooms.get(room),
-                            room);
+            RoomCalendar cal = null;
+            if (!calendarList.containsKey(room)) {
+                cal = new RoomCalendar(knownRooms.get(room),
+                        room);
+            } else {
+                cal = calendarList.get(room);
+            }
+
             try {
                 pullMeetings(cal);
                 calendarList.put(room, cal);
@@ -246,8 +251,8 @@ public class CalendarReader {
         if (actualMeeting != null) {
             //Maybe the meeting is finished already?
             boolean meetingFinished = false;
-            for (final Meeting meeting : calendar.getManuallyFinishedMeetings()) {
-                if (meeting.getId().equals(actualMeeting.getId())) {
+            for (final String meetingId : calendar.getManuallyFinishedMeetings()) {
+                if (meetingId.equals(actualMeeting.getId())) {
                     meetingFinished = true;
                     break;
                 }
@@ -314,7 +319,7 @@ public class CalendarReader {
             if (roomCalendar.getManuallyFinishedMeetings().size() > 50) {
                 roomCalendar.getManuallyFinishedMeetings().clear();
             }
-            roomCalendar.getManuallyFinishedMeetings().add(currentMeeting);
+            roomCalendar.getManuallyFinishedMeetings().add(currentMeeting.getId());
         }
     }
 }
