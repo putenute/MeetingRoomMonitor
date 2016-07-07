@@ -10,6 +10,7 @@ import java.util.Objects;
 
 public class Meeting {
 
+    private String id;
     private String organizer;
     private String startTimePretty;
     private String endTimePretty;
@@ -18,13 +19,19 @@ public class Meeting {
     private Date endTime;
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 
-    public Meeting(final String organizer, final String title, final Date startTime, final Date endTime) {
+    public Meeting(final String id, final String organizer, final String title, final Date startTime, final Date
+            endTime) {
+        this.id = Objects.requireNonNull(id);
         this.organizer = Objects.requireNonNull(organizer);
         this.title = title;
         this.startTime = Objects.requireNonNull(startTime);
         this.endTime = Objects.requireNonNull(endTime);
         this.startTimePretty = dateFormatter.format(startTime);
         this.endTimePretty = dateFormatter.format(endTime);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getEndTimePretty() {
@@ -73,5 +80,9 @@ public class Meeting {
 
     public void setEndTime(final Date endTime) {
         this.endTime = endTime;
+    }
+
+    public void endMeeting() {
+
     }
 }

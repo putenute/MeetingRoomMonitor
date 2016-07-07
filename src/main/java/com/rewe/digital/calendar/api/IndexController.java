@@ -51,6 +51,12 @@ public class IndexController {
         return calReader.getMeetingRoomMonitorData(roomId);
     }
 
+    @RequestMapping("/events/{roomId}/endevent")
+    public void endEventsForRoom(@PathVariable("roomId") final String roomId) {
+        calReader.refreshMeetingsForAllCalendars();
+        calReader.endcurrrentEvent(roomId);
+    }
+
     @RequestMapping("/vote/{roomId}/{action}")
     public void voteRoomClean(@PathVariable("roomId") final String roomId,
             @PathVariable("action") final String action) {
