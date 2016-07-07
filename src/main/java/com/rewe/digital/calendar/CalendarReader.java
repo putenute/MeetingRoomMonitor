@@ -3,6 +3,7 @@ package com.rewe.digital.calendar;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -48,7 +49,13 @@ public class CalendarReader {
         this.p12file = p12file;
         this.serviceAccountEmail = serviceAccountEmail;
         knownRooms.put("Room - RED", "rewe-digital.com_2d34333934343339393831@resource.calendar.google.com");
-        //knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
+        knownRooms.put("Room - YELLOW", "rewe-digital.com_2d34343833323535383331@resource.calendar.google.com");
+        knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
+        knownRooms.put("Room - PETROL", "rewe-digital.com_2d38393135363131393037@resource.calendar.google.com");
+        knownRooms.put("Room - GREEN", "rewe-digital.com_323733373636393237@resource.calendar.google.com");
+        knownRooms.put("Room - ORANGE", "rewe-digital.com_35393432353237302d313938@resource.calendar.google.com");
+        knownRooms.put("Room - VENUS", "rewe-digital.com_33313835373234392d3337@resource.calendar.google.com");
+
         createCalendars();
     }
 
@@ -63,37 +70,7 @@ public class CalendarReader {
 
 
             refreshMeetingsForAllCalendars();
-            //TODO Für andere calendar machen!             updateStatus(cal);
 
-            /* TODO: Service Account hat keinen Zugriff auf Räume !
-            {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_2d34353638383831343730@resource.calendar.google.com", "Room GRAY");
-                calendarList.put("Room GRAY", cal);
-            }
-
-            {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_2d38393135363131393037@resource.calendar.google.com", "Room PETROL");
-                calendarList.put("Room PETROL", cal);
-            }
-
-            {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_3235373634393033383931@resource.calendar.google.com", "Arena Green");
-                calendarList.put("Arena Green", cal);
-            }
-            {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_323733373636393237@resource.calendar.google.com", "Room GREEN");
-                calendarList.put("Room GREEN", cal);
-            }
-            {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_35393432353237302d313938@resource.calendar.google.com", "Room ORANGE");
-                calendarList.put("Room ORANGE", cal);
-            }
-            {
-                RoomCalendar cal = new RoomCalendar("rewe-digital.com_3532363232323630313836@resource.calendar.google
-                .com", "Room VIENNA");
-                calendarList.put("Room VIENNA", cal);
-            }
-            */
 
         } catch (final IOException e) {
             e.printStackTrace();
@@ -109,10 +86,18 @@ public class CalendarReader {
             final RoomCalendar cal =
                     new RoomCalendar(knownRooms.get(room),
                             room);
-            calendarList.put(room, cal);
 
+            try {
 
-            pullMeetings(cal);
+                pullMeetings(cal);
+                calendarList.put(room, cal);
+            } catch (GoogleJsonResponseException jsonEx) {
+                System.out.println("GoogleJsonResponseException during API-Fetch of room "+ room + " with Code="+ jsonEx.getStatusCode() + " message="+jsonEx.getStatusMessage());
+            }catch (Exception e) {
+                System.out.println("Error during API-Fetch of room "+ room);
+                //e.printStackTrace();
+            }
+
         }
     }
 
@@ -136,7 +121,7 @@ public class CalendarReader {
         }
     }
 
-    public static void pullMeetings(final RoomCalendar calendar) {
+    private static void pullMeetings(final RoomCalendar calendar) throws IOException {
 
         final java.util.Calendar now = java.util.Calendar.getInstance();
         final Date today = new Date();
@@ -146,55 +131,51 @@ public class CalendarReader {
         today.setMinutes(59);
         final DateTime maxTime = new DateTime(System.currentTimeMillis() + (12 * 60 * 60 * 1000));
         calendar.clearMeetings();
-        try {
-
-            final Calendar.Events.List list = client.events().list(calendar.getRoomId());
-            list.setTimeMin(minTime);
-            list.setTimeMax(maxTime);
-            list.setMaxResults(10);
-            list.setSingleEvents(true);
-            final Events eventFeed = list.execute();
-            for (final Event event : eventFeed.getItems()) {
-                if (event.getStart() != null && event.getEnd() != null) {
-                    final java.util.Calendar timeToCheck = java.util.Calendar.getInstance();
-                    timeToCheck.setTimeInMillis(event.getStart().getDateTime().getValue());
-                    if (now.get(java.util.Calendar.YEAR) == timeToCheck.get(java.util.Calendar.YEAR)) {
-                        if (now.get(java.util.Calendar.DAY_OF_YEAR) == timeToCheck.get(java.util.Calendar.DAY_OF_YEAR))
-                            if (!event.getStatus().equals("cancelled")) {
-                                String organizer = "-";
-                                if (event.getOrganizer() != null) {
-                                    if (event.getOrganizer().getDisplayName() == null) {
-                                        organizer = event.getOrganizer().getEmail();
-                                    }
-                                    else {
-                                        organizer = event.getOrganizer().getDisplayName();
-                                    }
+         final Calendar.Events.List list = client.events().list(calendar.getRoomId());
+        list.setTimeMin(minTime);
+        list.setTimeMax(maxTime);
+        list.setMaxResults(10);
+        list.setSingleEvents(true);
+        final Events eventFeed = list.execute();
+        for (final Event event : eventFeed.getItems()) {
+            if (event.getStart() != null && event.getEnd() != null) {
+                final java.util.Calendar timeToCheck = java.util.Calendar.getInstance();
+                timeToCheck.setTimeInMillis(event.getStart().getDateTime().getValue());
+                if (now.get(java.util.Calendar.YEAR) == timeToCheck.get(java.util.Calendar.YEAR)) {
+                    if (now.get(java.util.Calendar.DAY_OF_YEAR) == timeToCheck.get(java.util.Calendar.DAY_OF_YEAR))
+                        if (!event.getStatus().equals("cancelled")) {
+                            String organizer = "-";
+                            if (event.getOrganizer() != null) {
+                                if (event.getOrganizer().getDisplayName() == null) {
+                                    organizer = event.getOrganizer().getEmail();
                                 }
-                                //CHECK: If visibility = private, then there will be no attendees!
-                                if (event.getVisibility() != null && event.getVisibility().equals("private")) {
-                                    final Meeting meeting = new Meeting("Privat", "Privater Termin",
-                                            new Date(event.getStart().getDateTime().getValue()),
-                                            new Date(event.getEnd().getDateTime().getValue()));
-                                    calendar.addMeeting(meeting);
-                                } else {
-                                    for (final EventAttendee attendee : event.getAttendees()) {
-                                        if (attendee.getResource() != null) {
-                                            if (attendee.getResource() == true && attendee.getDisplayName().equals(calendar.getRoomName()) && !attendee.getResponseStatus().equals("declined")) {
-                                                final Meeting meeting = new Meeting(organizer, event.getSummary(),
-                                                        new Date(event.getStart().getDateTime().getValue()),
-                                                        new Date(event.getEnd().getDateTime().getValue()));
-                                                calendar.addMeeting(meeting);
-                                            }
+                                else {
+                                    organizer = event.getOrganizer().getDisplayName();
+                                }
+                            }
+                            //CHECK: If visibility = private, then there will be no attendees!
+                            if (event.getVisibility() != null && event.getVisibility().equals("private")) {
+                                final Meeting meeting = new Meeting("Privat", "Privater Termin",
+                                        new Date(event.getStart().getDateTime().getValue()),
+                                        new Date(event.getEnd().getDateTime().getValue()));
+                                calendar.addMeeting(meeting);
+                            } else {
+                                for (final EventAttendee attendee : event.getAttendees()) {
+                                    if (attendee.getResource() != null) {
+                                        if (attendee.getResource() == true && attendee.getDisplayName().equals(calendar.getRoomName()) && !attendee.getResponseStatus().equals("declined")) {
+                                            final Meeting meeting = new Meeting(organizer, event.getSummary(),
+                                                    new Date(event.getStart().getDateTime().getValue()),
+                                                    new Date(event.getEnd().getDateTime().getValue()));
+                                            calendar.addMeeting(meeting);
                                         }
                                     }
                                 }
                             }
-                    }
+                        }
                 }
             }
-        } catch (final IOException e) {
-            e.printStackTrace();
         }
+
     }
 
     public DataTransferObject getMeetingRoomMonitorData(final String roomName) {
@@ -203,6 +184,10 @@ public class CalendarReader {
 
         // Get all meetings for this room
         final RoomCalendar calendar = calendarList.get(roomName);
+        if(calendar == null) {
+            dataTransferObject.setRoomName("ROOM NOT KNOWN!");
+            return dataTransferObject;
+        }
         dataTransferObject.setRoomName(roomName);
 
 

@@ -1,13 +1,7 @@
 /**
  * Created by rattenfaenger on 06/07/16.
  */
-
-$('document').ready(function() {
-    fetchDataFromServer();
-    window.setInterval(function() {
-        fetchDataFromServer();
-    }, 30000);
-});
+.
 
 function fetchDataFromServer() {
     $.get("/events", null, function(data, textStatus, jqXHR) {
