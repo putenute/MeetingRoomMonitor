@@ -61,8 +61,11 @@ public class RoomCalendar {
 
     public Meeting getMeetingAt(final Date time) {
         for (final Meeting meeting : meetings) {
-            if (meeting.getStartTime().before(time) && meeting.getEndTime().after(time))
-               return meeting;
+            if (meeting.getStartTime().before(time) && meeting.getEndTime().after(time)){
+                System.out.println(time.toString()+": There is currently a meeting "+meeting.getTitle()+" in room"+roomName);
+                return meeting;
+            }
+
         }
         return null;
     }
@@ -86,18 +89,23 @@ public class RoomCalendar {
     }
 
     public String getNextMeetingStartTime() {
-        String time = "Ganzer Tag";
-        final ArrayList<Meeting> nextMeetings = getMeetingsAfter(new Date());
-        Collections.sort(meetings, new MeetingComparator());
-        if (meetings.size() > 0) {
-            time = meetings.get(0).getStartTimePretty();
+        final Date now = new Date();
+        if (getMeetingsAfter(now).size() > 0) {
+            final Meeting nextMeeting = getMeetingsAfter(now).get(0);
+            if (nextMeeting != null) {
+                return nextMeeting.getStartTimePretty();
+            }
         }
-        return time;
+        return "Ganzer Tag";
     }
 
     public boolean getStatus() {
         final Date now = new Date();
-        return getMeetingAt(now) == null ? false : true;
+        Meeting currentMeeting =  getMeetingAt(now);
+        if(currentMeeting == null) {
+            return true;
+        }
+        return false;
     }
 
     public List<Meeting> getMeetings() {

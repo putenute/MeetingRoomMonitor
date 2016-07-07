@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 
 @Component
 public class CalendarReader {
@@ -64,8 +65,6 @@ public class CalendarReader {
         knownRooms.put("Room - VENUS", "rewe-digital.com_33313835373234392d3337@resource.calendar.google.com");
         knownRooms.put("Room - SKY RED", "rewe-digital.com_2d353631343032313834@resource.calendar.google.com");
 
-
-                knownRooms.put("MeetingMonitorTrestFoo", "rewe-digital.com_ucbb14vo8bef2m06p1bgf4pc5s@group.calendar.google.com");
 
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -133,8 +132,10 @@ public class CalendarReader {
 
     public static void updateStatus(final RoomCalendar calendar) {
         if (calendar.getStatus()) {
+            System.out.println("Cal "+calendar.getRoomName() + ": Status=Frei");
             calendarStatus.put(calendar.getRoomName(), true);
         } else {
+            System.out.println("Cal "+calendar.getRoomName() + ": Status=Belegt");
             calendarStatus.put(calendar.getRoomName(), false);
         }
     }
@@ -286,15 +287,37 @@ public class CalendarReader {
 
         }
 
-
         // Next free meetings
-        // next free meetings
-        //if (nextFreeRoomCalendar != null) {
-            //html = html.replace(NEXT_FREE_ROOM_NAME, nextFreeRoomCalendar.getRoomName());
-           // html = html.replace(NEXT_FREE_ROOM_TIME, nextFreeRoomCalendar.getNextMeetingStartTime());
-        //}
-        dataTransferObject.setNextFreeRoomFreeUntil("23:11");
-        dataTransferObject.setNextFreeRoomName("Room DeineMudda");
+        //Find next free room
+        String nextFreeRoom = "";
+        dataTransferObject.setNextFreeRoomFreeUntil("");
+        dataTransferObject.setNextFreeRoomName("");
+
+
+        Iterator iter = calendarList.entrySet().iterator();
+
+        while (iter.hasNext()) {
+            Map.Entry pair = (Map.Entry) iter.next();
+            String currentRoomName = (String) pair.getKey();
+            RoomCalendar currentCal = (RoomCalendar) pair.getValue();
+            if (currentCal.getStatus() == true ) {
+                if (!(currentRoomName.equals(roomName))){
+                    nextFreeRoom = (String) pair.getKey();
+                    // TODO: Find out which room is nearest to roomName!
+
+                    // Fill the fields, dude!
+                    dataTransferObject.setNextFreeRoomFreeUntil(currentCal.getNextMeetingStartTime());
+                    dataTransferObject.setNextFreeRoomName(currentRoomName);
+                    System.out.println("Found next Free room next of room "+roomName+": "+currentRoomName+" until "+currentCal.getNextMeetingStartTime());
+
+                    break;
+                }
+            }
+        }
+
+        // Set nexFreeRoomVariables
+        final RoomCalendar nextFreeRoomCalendar = calendarList.get(nextFreeRoom);
+
 
         return dataTransferObject;
     }
