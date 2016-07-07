@@ -66,7 +66,7 @@ public class RoomCalendar {
         return null;
     }
 
-    public Meeting getMeetingBefore(final Date time) {
+    public Meeting getLastFinishedMeetingBefore(final Date time) {
         final Optional<Meeting> first = meetings
                 .stream()
                 .sorted((e1, e2) -> e1.getEndTime()

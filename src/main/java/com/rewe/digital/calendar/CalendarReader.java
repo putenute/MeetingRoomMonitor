@@ -82,7 +82,6 @@ public class CalendarReader {
             final RoomCalendar cal =
                     new RoomCalendar(knownRooms.get(room),
                             room);
-
             try {
                 pullMeetings(cal);
                 calendarList.put(room, cal);
@@ -184,13 +183,13 @@ public class CalendarReader {
             return;
         }
         //roomCalendar.getMeetingAt()
-        //String lastEventInRoom = findLastMeetingInRoom();
+        final Meeting lastEventInRoom = roomCalendar.getLastFinishedMeetingBefore(new Date());
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
-            //notificationService.notifyOrganizerClean();
+            notificationService.notifyOrganizerClean(lastEventInRoom);
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
-            //notificationService.notifyOrganizerDirty();
+            notificationService.notifyOrganizerDirty(lastEventInRoom);
         }
 
     }
