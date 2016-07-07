@@ -25,7 +25,7 @@
     <!-- Room State -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="alert alert-success" id="roomBox" style="margin-top:5px">
+            <div class="alert alert-success" id="roomBox" style="margin-top:5px;">
                 <div class="text-center"><h1 id="roomName">Room Name</h1></div>
                 <table class="table table-condensed" style="margin-bottom:0px">
                     <tbody>
@@ -53,8 +53,7 @@
                             <td class="text-left" colspan="3"><p class="lead" id="currentTitle" style="font-size:28px">currentTitle</p></td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="2">Organisator</td>
-                            <td class="text-right">endet um:</td>
+                            <td class="text-left" id="currentOrgaLabel" colspan="3">Organisator</td>
                         </tr>
                         <tr>
                             <td class="text-left" colspan="2"><strong class="lead"
@@ -93,8 +92,8 @@
                             <td class="text-left" colspan="3"><p class="lead" id="nextTitle" style="font-size:28px">nextTitle</p></td>
                         </tr>
                         <tr>
-                            <td class="text-left" colspan="2">Organisator</td>
-                            <td class="text-right">beginnt um:</td>
+                            <td class="text-left" id="nextOrgaLabel" colspan="3">Organisator</td>
+                            <!--<td class="text-right">beginnt um:</td>-->
                         </tr>
                         <tr>
                             <td class="text-left" colspan="2"><strong class="lead" id="nextOrganizator">nextOrganizator</strong></td>
@@ -108,7 +107,7 @@
     </div>
 
     <div class="row" id="nextFreeRoomBox">
-        <div class="col-sm-12 panel panel-default">
+        <div class="col-sm-12 panel panel-default" style="background-color:#007b5c">
             <table class="table table-condensed" style="margin-bottom:2px">
                 <tbody>
                 <tr>
@@ -185,7 +184,7 @@
             </div>
             <div class="col-sm-6">
                 <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
-                        data-target="#modal-container-750565">aktuellen Termin beenden
+                        data-target="#modal-container-750565" id="btnTerminateModal">Raum frühzeitig freigeben
                 </button>
 
                 <div class="modal fade" id="modal-container-750565" role="dialog" aria-labelledby="myModalLabel"
@@ -193,22 +192,21 @@
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Aktuellen Termin beenden?</h4>
+                                <h4 class="modal-title">Raum ab sofort freigeben?</h4>
                             </div>
 
                             <div class="modal-body">
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <button type="button" class="btn btn-danger btn-lg btn-block"
+                                            <button type="button" class="btn btn-success btn-lg btn-block"
                                                     data-dismiss="modal" id="btnTerminateEvent"
-                                                    style="margin-top:50px; margin-bottom:50px;">beenden
+                                                    style="margin-top:50px; margin-bottom:50px;">ja
                                             </button>
                                         </div>
                                         <div class="col-sm-6">
-                                            <button type="button" class="btn btn-primary btn-lg btn-block"
-                                                    data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nicht
-                                                beenden
+                                            <button type="button" class="btn btn-danger btn-lg btn-block"
+                                                    data-dismiss="modal" style="margin-top:50px; margin-bottom:50px;">nein
                                             </button>
                                         </div>
                                     </div>

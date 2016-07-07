@@ -9,12 +9,14 @@ var roomBox,            // container for room details
     
     currentTitle,
     currentEventBox,
+    currentOrgaLabel,
     currentOrganizator,
     currentStartTime,
     currentEndTime,
     
     nextEventBox,
     nextTitle,
+    nextOrgaLabel,
     nextOrganizator,
     nextStartTime,
     nextEndTime,
@@ -33,6 +35,7 @@ var roomBox,            // container for room details
     btnFeedbackNeutral,
     btnFeedbackNeg,
     btnTerminateEvent,
+    btnTerminateModal,
 
     loader;
 
@@ -45,12 +48,14 @@ $('document').ready(function () {
     
     currentEventBox = $('#currentEventBox');
     currentTitle = $('#currentTitle');
+    currentOrgaLabel = $('#currentOrgaLabel')
     currentOrganizator = $('#currentOrganizator');
     currentStartTime = $('#currentStartTime');
     currentEndTime = $('#currentEndTime');
     
     nextEventBox = $('#nextEventBox');
     nextTitle = $('#nextTitle');
+    nextOrgaLabel = $('#nextOrgaLabel')
     nextOrganizator = $('#nextOrganizator');
     nextStartTime = $('#nextStartTime');
     nextEndTime = $('#nextEndTime');
@@ -70,6 +75,11 @@ $('document').ready(function () {
     //btnFeedbackNeutral = $('#btnFeedbackNeutral');
     //btnFeedbackNeg = $('#btnFeedbackNeg');
     btnTerminateEvent = $('#btnTerminateEvent');
+    btnTerminateModal = $('#btnterminatemodal');
+
+    btnTerminateModal.on('click', function() {
+        $('#modal-container-750565').modal('show');
+    })
 
     loader = $('#loader');
     loader.height($(window).height());
@@ -85,11 +95,12 @@ function setRoomFree() {
     currentEventBox.hide();
     nextFreeRoomBox.hide();
     btnTerminateEvent.addClass("disabled");
+    btnTerminateModal.addClass("disabled");
 
     roomState.html("frei");
 }
 
-function setRoomOccupied(title, owner, end) {
+function setRoomOccupied(title, owner, start, end) {
     if (roomBox.hasClass("alert-success")) {
         roomBox.removeClass("alert-success");
         roomBox.addClass("alert-danger");
@@ -98,10 +109,11 @@ function setRoomOccupied(title, owner, end) {
     currentEventBox.show();
     nextFreeRoomBox.show();
     btnTerminateEvent.removeClass("disabled");
+    btnTerminateModal.removeClass("disabled");
 
     setCurrentTitle(title);
     setCurrentOwner(owner);
-    setCurrentEnd(end);
+    setCurrentEnd('von: ' + start + ' bis ' + end);
     roomState.html("besetzt");
 }
 
@@ -110,13 +122,13 @@ function noFurtherEvents() {
     noMoreEventsBox.show();
 }
 
-function setNextEvent(title, owner, start) {
+function setNextEvent(title, owner, start, end) {
     nextEventBox.show();
     noMoreEventsBox.hide();
 
     setNextTitle(title);
     setNextOwner(owner);
-    setNextStart(start);
+    setNextStart('von: ' + start + ' bis ' + end);
 }
 
 function setRoomName(name) {
@@ -128,7 +140,13 @@ function setCurrentTitle(title) {
 }
 
 function setCurrentOwner(owner) {
-    currentOrganizator.html(owner);
+    if (owner == "") {
+        currentOrgaLabel.html("");
+        currentOrganizator.html("");
+    } else {
+        currentOrgaLabel.html("Organisator");
+        currentOrganizator.html(owner);
+    }
 }
 
 function setCurrentStart(start) {
@@ -144,7 +162,13 @@ function setNextTitle(title) {
 }
 
 function setNextOwner(owner) {
-    nextOrganizator.html(owner);
+    if (owner == "") {
+        nextOrgaLabel.html("");
+        nextOrganizator.html("");
+    } else {
+        nextOrgaLabel.html("Organisator");
+        nextOrganizator.html(owner);
+    }
 }
 
 function setNextStart(start) {
@@ -169,7 +193,7 @@ function setNextFreeRoom(room, time) {
 }
 
 function setFreeUntil(time) {
-    freeUntil.html('frei bis: ' + time);
+    freeUntil.html(time);
 }
 
 function setTime(timeString) {
