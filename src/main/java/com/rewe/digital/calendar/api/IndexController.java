@@ -1,14 +1,15 @@
 package com.rewe.digital.calendar.api;
 
 import com.rewe.digital.calendar.CalendarReader;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class IndexController {
@@ -20,10 +21,9 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(final HttpServletResponse response) throws IOException {
-        final ClassLoader classLoader = getClass().getClassLoader();
-        final File file = new File(classLoader.getResource("public/index.htm").getFile());
+        final List list = IOUtils.readLines(ClassLoader.getSystemResourceAsStream("public/index.htm"));
 
-        return FileUtils.readFileToString(file);
+        return String.join("", list);
     }
 
     @RequestMapping("/events/sample")
@@ -43,8 +43,12 @@ public class IndexController {
         dataTransferObject.setRoomName("Room -  RED");
 
         return dataTransferObject;
+    }
 
-
+    @RequestMapping("/events/{roomId}")
+    public DataTransferObject getEventsForRoom(@PathParam("roomId") final String roomId) {
+        
+        return null;
     }
 
 
