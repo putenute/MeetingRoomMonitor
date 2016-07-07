@@ -15,7 +15,7 @@ public class RoomCalendar {
     private String roomId;
     private final List<Date> roomVotedDirty = new ArrayList<>();
     private final List<Date> roomVotedClean = new ArrayList<>();
-    private final List<String> manuallyFinishedMeetings = new ArrayList<>();
+    private final List<Meeting> manuallyFinishedMeetings = new ArrayList<>();
 
     public RoomCalendar(final String id, final String name) {
         this.roomId = Objects.requireNonNull(id);
@@ -89,9 +89,12 @@ public class RoomCalendar {
     }
 
     public String getNextMeetingStartTime() {
-        final Date now = new Date();
-        if (getMeetingsAfter(now).size() > 0) {
-            final Meeting nextMeeting = getMeetingsAfter(now).get(0);
+        return getNextMeetingStartTime(new Date());
+    }
+
+    public String getNextMeetingStartTime(Date time) {
+        if (getMeetingsAfter(time).size() > 0) {
+            final Meeting nextMeeting = getMeetingsAfter(time).get(0);
             if (nextMeeting != null) {
                 return nextMeeting.getStartTimePretty();
             }
@@ -121,7 +124,7 @@ public class RoomCalendar {
         return nextMeetings;
     }
 
-    public List<String> getManuallyFinishedMeetings() {
+    public List<Meeting> getManuallyFinishedMeetings() {
         return manuallyFinishedMeetings;
     }
 }
