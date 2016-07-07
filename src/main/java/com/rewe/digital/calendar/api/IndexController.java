@@ -51,14 +51,14 @@ public class IndexController {
         return calReader.getMeetingRoomMonitorData(roomId);
     }
 
-
-    @RequestMapping("/events")
-    public DataTransferObject getEvents() {
-
-        return calReader.getMeetingRoomMonitorData("Room - RED");
-
-
+    @RequestMapping("/vote/{roomId}/clean")
+    public void voteRoomClean(@PathVariable("roomId") final String roomId) {
+        calReader.roomvote(roomId, true);
     }
 
+    @RequestMapping("/vote/{roomId}/dirty")
+    public void voteRoomDirty(@PathVariable("roomId") final String roomId) {
+        calReader.roomvote(roomId, false);
+    }
 
 }
