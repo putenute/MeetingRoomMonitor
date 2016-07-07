@@ -58,7 +58,7 @@ public class CalendarReader {
         this.notificationService = notificationService;
         knownRooms.put("Room - RED", "rewe-digital.com_2d34333934343339393831@resource.calendar.google.com");
         knownRooms.put("Room - YELLOW", "rewe-digital.com_2d34343833323535383331@resource.calendar.google.com");
-        knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
+   //     knownRooms.put("Room - VIENNA", "rewe-digital.com_3532363232323630313836@resource.calendar.google.com");
         knownRooms.put("Room - PETROL", "rewe-digital.com_2d38393135363131393037@resource.calendar.google.com");
         knownRooms.put("Room - GREEN", "rewe-digital.com_323733373636393237@resource.calendar.google.com");
         knownRooms.put("Room - ORANGE", "rewe-digital.com_35393432353237302d313938@resource.calendar.google.com");
@@ -252,8 +252,8 @@ public class CalendarReader {
         if (actualMeeting != null) {
             //Maybe the meeting is finished already?
             boolean meetingFinished = false;
-            for (final String meetingId : calendar.getManuallyFinishedMeetings()) {
-                if (meetingId.equals(actualMeeting.getId())) {
+            for (final Meeting meeting : calendar.getManuallyFinishedMeetings()) {
+                if (meeting.getId().equals(actualMeeting.getId())) {
                     meetingFinished = true;
                     break;
                 }
@@ -294,8 +294,9 @@ public class CalendarReader {
         dataTransferObject.setNextFreeRoomName("");
 
 
-        Iterator iter = calendarList.entrySet().iterator();
 
+        //Find free Meetingroom in known rooms
+        Iterator iter = calendarList.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry pair = (Map.Entry) iter.next();
             String currentRoomName = (String) pair.getKey();
@@ -309,10 +310,27 @@ public class CalendarReader {
                     dataTransferObject.setNextFreeRoomFreeUntil(currentCal.getNextMeetingStartTime());
                     dataTransferObject.setNextFreeRoomName(currentRoomName);
                     System.out.println("Found next Free room next of room "+roomName+": "+currentRoomName+" until "+currentCal.getNextMeetingStartTime());
-
                     break;
                 }
             }
+
+            // Find free rooms in internal data muff, in case someone has cancelled a meetin manually
+            for (final Meeting meeting : currentCal.getManuallyFinishedMeetings()) {
+               if(currentCal.getMeetingAt(new Date()).getId().equals(meeting.getId())){
+                    System.out.println("Found next Free room next of room "+roomName+": "+currentRoomName+" until "+currentCal.getNextMeetingStartTime());
+                    dataTransferObject.setNextFreeRoomName(currentRoomName);
+                    // How long is it free, the room?
+                    dataTransferObject.setNextFreeRoomFreeUntil(currentCal.getNextMeetingStartTime(meeting.getEndTime()));
+                    break;
+                }
+            }
+
+
+        }
+
+        if(nextFreeRoom.equals("")) {
+
+
         }
 
         // Set nexFreeRoomVariables
@@ -342,7 +360,7 @@ public class CalendarReader {
             if (roomCalendar.getManuallyFinishedMeetings().size() > 50) {
                 roomCalendar.getManuallyFinishedMeetings().clear();
             }
-            roomCalendar.getManuallyFinishedMeetings().add(currentMeeting.getId());
+            roomCalendar.getManuallyFinishedMeetings().add(currentMeeting);
         }
     }
 }
