@@ -173,14 +173,12 @@ public class CalendarReader {
                                 }
                             }
                             //CHECK: If visibility = private, then there will be no attendees!
-                            if (event.getVisibility() != null && event.getVisibility().equals("private") || event
-                                    .getVisibility() == null) {
+                            if (event.getVisibility() != null && event.getVisibility().equals("private")) {
                                 final Meeting meeting = new Meeting(event.getId(), "Privat", "Privater Termin",
                                         new Date(event.getStart().getDateTime().getValue()),
                                         new Date(event.getEnd().getDateTime().getValue()));
                                 calendar.addMeeting(meeting);
-                            } else {
-                                if (!CollectionUtils.isEmpty(event.getAttendees())) {
+                            } else if (!CollectionUtils.isEmpty(event.getAttendees())) {
                                     for (final EventAttendee attendee : event.getAttendees()) {
                                         if (attendee.getResource() != null) {
                                             if (attendee.getResource() == true &&
@@ -194,8 +192,13 @@ public class CalendarReader {
                                             }
                                         }
                                     }
-                                }
 
+
+                            } else {
+                                final Meeting meeting = new Meeting(event.getId(), "", event.getSummary(),
+                                        new Date(event.getStart().getDateTime().getValue()),
+                                        new Date(event.getEnd().getDateTime().getValue()));
+                                calendar.addMeeting(meeting);
                             }
                         }
                 }
