@@ -56,9 +56,5 @@ public class IndexController {
     public DataTransferObject getEvents() {
 
         return calReader.getMeetingRoomMonitorData("Room - RED");
-
-
     }
-
-
 }
