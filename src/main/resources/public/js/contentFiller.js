@@ -32,7 +32,9 @@ var roomBox,            // container for room details
     btnFeedbackPos,
     btnFeedbackNeutral,
     btnFeedbackNeg,
-    btnTerminateEvent;
+    btnTerminateEvent,
+
+    loader;
 
 // get all relevant gui elements and set click listeners
 $('document').ready(function () {
@@ -68,6 +70,10 @@ $('document').ready(function () {
     //btnFeedbackNeutral = $('#btnFeedbackNeutral');
     //btnFeedbackNeg = $('#btnFeedbackNeg');
     btnTerminateEvent = $('#btnTerminateEvent');
+
+    loader = $('#loader');
+    loader.height($(window).height());
+    $('#spinner').css("margin-top", (($(window).height() / 2) - 50) + "px");
 });
 
 function setRoomFree() {
