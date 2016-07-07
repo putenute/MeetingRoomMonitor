@@ -1,14 +1,15 @@
 package com.rewe.digital.calendar.api;
 
 import com.rewe.digital.calendar.CalendarReader;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class IndexController {
@@ -20,10 +21,9 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(final HttpServletResponse response) throws IOException {
-        final ClassLoader classLoader = getClass().getClassLoader();
-        final File file = new File(classLoader.getResource("public/index.htm").getFile());
+        final List list = IOUtils.readLines(ClassLoader.getSystemResourceAsStream("public/index.htm"));
 
-        return FileUtils.readFileToString(file);
+        return String.join("", list);
     }
 
     @RequestMapping("/events/sample")
@@ -43,18 +43,23 @@ public class IndexController {
         dataTransferObject.setRoomName("Room -  RED");
 
         return dataTransferObject;
-
-
     }
 
-
-    @RequestMapping("/events")
-    public DataTransferObject getEvents() {
-
-        return calReader.getMeetingRoomMonitorData();
-
-
+    @RequestMapping("/events/{roomId}")
+    public DataTransferObject getEventsForRoom(@PathVariable("roomId") final String roomId) {
+        calReader.refreshMeetingsForAllCalendars();
+        return calReader.getMeetingRoomMonitorData(roomId);
     }
 
-
+    @RequestMapping("/vote/{roomId}/{action}")
+    public void voteRoomClean(@PathVariable("roomId") final String roomId,
+            @PathVariable("action") final String action) {
+        if (action.equalsIgnoreCase("clean")) {
+            calReader.roomvote(roomId, true);
+        } else if (action.equalsIgnoreCase("dirty")) {
+            calReader.roomvote(roomId, false);
+        } else if (action.equalsIgnoreCase("reset")) {
+            calReader.resetVote(roomId);
+        }
+    }
 }
