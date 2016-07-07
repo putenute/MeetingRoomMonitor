@@ -14,6 +14,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.gmail.GmailScopes;
 import com.rewe.digital.calendar.api.DataTransferObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,8 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,12 +62,20 @@ public class CalendarReader {
         knownRooms.put("Room - ORANGE", "rewe-digital.com_35393432353237302d313938@resource.calendar.google.com");
         knownRooms.put("Room - VENUS", "rewe-digital.com_33313835373234392d3337@resource.calendar.google.com");
 
+        try {
+            httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        } catch (final GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+
         createCalendars();
     }
 
     public void createCalendars() {
         try {
-            httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+
             final Credential credential =
                     authorize(serviceAccountEmail, p12file);
             client = new com.google.api.services.calendar.Calendar.Builder(
@@ -103,7 +113,8 @@ public class CalendarReader {
         final GoogleCredential credential = new GoogleCredential.Builder().setTransport(httpTransport)
                 .setJsonFactory(jsonFactory)
                 .setServiceAccountId(serviceAccountEmail)
-                .setServiceAccountScopes(Collections.singleton(CalendarScopes.CALENDAR))
+                .setServiceAccountScopes(Arrays.asList(CalendarScopes.CALENDAR, GmailScopes
+                        .GMAIL_SEND, GmailScopes.GMAIL_COMPOSE))
                 .setServiceAccountPrivateKeyFromP12File(new File(p12File))
                 .build();
         return credential;
@@ -178,18 +189,27 @@ public class CalendarReader {
      * Is used to vote a room clean or dirty
      */
     public void roomvote(final String roomId, final boolean isClean) {
-        final RoomCalendar roomCalendar = calendarList.get(roomId);
-        if (roomCalendar == null) {
-            return;
-        }
+        final RoomCalendar roomCalendar = calendarList.get(roomId) == null ? new RoomCalendar("Wurst", "Käse") :
+                calendarList.get(roomId);
         //roomCalendar.getMeetingAt()
         final Meeting lastEventInRoom = roomCalendar.getLastFinishedMeetingBefore(new Date());
         if (isClean) {
             roomCalendar.getRoomVotedClean().add(new Date());
-            notificationService.notifyOrganizerClean(lastEventInRoom);
+            try {
+                notificationService
+                        .notifyOrganizerClean(lastEventInRoom, authorize(serviceAccountEmail, p12file),
+                                httpTransport);
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
         } else {
             roomCalendar.getRoomVotedDirty().add(new Date());
-            notificationService.notifyOrganizerDirty(lastEventInRoom);
+            try {
+                notificationService
+                        .notifyOrganizerDirty(lastEventInRoom, authorize(serviceAccountEmail, p12file), httpTransport);
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
