@@ -93,10 +93,11 @@
     var rowHeight = (($(window).height() - 60) / 3) - 10;
     iframes.width(colWidth);
     iframes.height(rowHeight);
-    $('footer', iframes.contents()).hide();
 
     $('#imprint').height(rowHeight);
     $('#imprint').width(colWidth);
+
+    iframes.on('load', function() { $('footer', iframes.contents()).hide(); });
 </script>
 
 <!--
