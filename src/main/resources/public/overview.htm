@@ -16,43 +16,69 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-12 text-center" id="head">
+            <h2>REWE Digital - Raumbelegung</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20SKY%20RED" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20GREEN" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20ORANGE" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20YELLOW" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20VIENNA" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20RED" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20VENUS" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <iframe class="embed-responsive-item" src="/index.htm?roomId=Room%20-%20PETROL" frameBorder="0" style="overflow:hidden" scrolling="no">
             </iframe>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4" style="">
+            <div id="imprint" style="display:table-cell; vertical-align:bottom; padding:15px">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img class="center-block" alt="Bootstrap Image Preview" src="images/affen.png" style="margin-bottom:20px" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-right">
+                                <span>&copy; Oliver Zilken, Tim Dauer, Moritz Janssen</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+
         </div>
     </div>
 </div>
@@ -64,10 +90,13 @@
 <script>
     var iframes = $('iframe');
     var colWidth = ($(window).width() / 3) - 10;
-    var rowHeight = ($(window).height() / 3) - 10;
+    var rowHeight = (($(window).height() - 60) / 3) - 10;
     iframes.width(colWidth);
     iframes.height(rowHeight);
     $('footer', iframes.contents()).hide();
+
+    $('#imprint').height(rowHeight);
+    $('#imprint').width(colWidth);
 </script>
 
 <!--
