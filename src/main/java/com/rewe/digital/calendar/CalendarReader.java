@@ -65,8 +65,7 @@ public class CalendarReader {
         knownRooms.put("Room - GREEN", "rewe-digital.com_323733373636393237@resource.calendar.google.com");
         knownRooms.put("Room - ORANGE", "rewe-digital.com_35393432353237302d313938@resource.calendar.google.com");
         knownRooms.put("Room - VENUS", "rewe-digital.com_33313835373234392d3337@resource.calendar.google.com");
-       knownRooms.put("Room - SKY RED", "rewe-digital.com_2d353631343032313834@resource.calendar.google.com");
-        knownRooms.put("MeetingMonitorTestFoo", "rewe-digital.com_ucbb14vo8bef2m06p1bgf4pc5s@group.calendar.google.com");
+        knownRooms.put("Room - SKY RED", "rewe-digital.com_2d353631343032313834@resource.calendar.google.com");
 
 
 
