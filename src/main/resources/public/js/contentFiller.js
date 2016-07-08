@@ -84,6 +84,11 @@ $('document').ready(function () {
     loader = $('#loader');
     loader.height($(window).height());
     $('#spinner').css("margin-top", (($(window).height() / 2) - 50) + "px");
+
+
+    // $('#red').html('<object data="/?roomId=Room%20-%20RED"/>');
+    // $('#green').html('<object data="/?roomId=Room%20-%20GREEN"/>');
+    // $('#orange').html('<object data="/?roomId=Room%20-%20ORANGE"/>');
 });
 
 function setRoomFree() {
