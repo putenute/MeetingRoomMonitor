@@ -37,6 +37,8 @@ public class CalendarReader {
 
     private final NotificationService notificationService;
 
+    private static Date lastFetch;
+
     public static final Map<String, String> knownRooms = new HashMap<>();
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "calendar-reader";
@@ -96,7 +98,22 @@ public class CalendarReader {
         }
     }
 
-    public void refreshMeetingsForAllCalendars(){
+    public static synchronized void refreshMeetingsForAllCalendars() {
+        if (lastFetch != null) {
+            final Date now = new Date();
+            if ((now.getTime() - lastFetch.getTime() > 60000)) {
+                doGoogleFetch();
+                lastFetch = now;
+            }
+        } else {
+            //First inital Fetch
+            doGoogleFetch();
+            lastFetch = new Date();
+        }
+    }
+
+    private static void doGoogleFetch() {
+        System.out.println("Making Google call...");
         for (final String room : knownRooms.keySet()) {
             RoomCalendar cal = null;
             if (!calendarList.containsKey(room)) {
@@ -110,16 +127,17 @@ public class CalendarReader {
                 pullMeetings(cal);
                 calendarList.put(room, cal);
             } catch (final GoogleJsonResponseException jsonEx) {
-                System.out.println("GoogleJsonResponseException during API-Fetch of room "+ room + " with Code="+ jsonEx.getStatusCode() + " message="+jsonEx.getStatusMessage());
+                System.out.println("GoogleJsonResponseException during API-Fetch of room " + room + " with Code=" +
+                        jsonEx.getStatusCode() + " message=" + jsonEx.getStatusMessage());
             } catch (final TokenResponseException oauthEx) {
                 System.out.println("Oauth2-TokenException during API-Fetch of room " + room + " with Code=" +
                         oauthEx.getStatusCode() + " message=" + oauthEx.getStatusMessage());
             } catch (final Exception e) {
-                System.out.println("Error during API-Fetch of room "+ room);
+                System.out.println("Error during API-Fetch of room " + room);
                 e.printStackTrace();
             }
-
         }
+        System.out.println("Google call finsihed!");
     }
 
     private static Credential authorize(final String serviceAccountEmail, final String p12File) throws Exception {
@@ -246,7 +264,6 @@ public class CalendarReader {
 
     public DataTransferObject getMeetingRoomMonitorData(final String roomName) {
         final DataTransferObject dataTransferObject = new DataTransferObject();
-
 
         // Get all meetings for this room
         final RoomCalendar calendar = calendarList.get(roomName);
