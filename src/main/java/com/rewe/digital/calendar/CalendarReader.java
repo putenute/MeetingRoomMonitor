@@ -297,6 +297,8 @@ public class CalendarReader {
                 dataTransferObject.setNextEventName( "KEIN WEITERER TERMIN");
             }
 
+        }else{
+            dataTransferObject.setNextEventName( "KEIN WEITERER TERMIN");
         }
 
         // Next free meetings
