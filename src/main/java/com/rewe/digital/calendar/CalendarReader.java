@@ -101,7 +101,7 @@ public class CalendarReader {
     public static synchronized void refreshMeetingsForAllCalendars() {
         if (lastFetch != null) {
             final Date now = new Date();
-            if ((now.getTime() - lastFetch.getTime() > 60000)) {
+            if ((now.getTime() - lastFetch.getTime() > 30000)) {
                 doGoogleFetch();
                 lastFetch = now;
             }

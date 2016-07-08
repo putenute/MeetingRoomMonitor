@@ -18,7 +18,7 @@ $('document').ready(function() {
     window.setInterval(function() {
         fetchDataFromServer();
         setTime(createCurrentTimeString());
-    }, 30000);
+    }, 5000);
 });
 
 function fetchDataFromServer() {
